@@ -62,7 +62,43 @@
 	
 	//添加到数据库里
 	function addStorage(){
-		
+		$.ajax({
+			type: "POST",
+			url:"material/addmaterial",
+			data:JSON.stringify(data),
+			dataType:"json",
+			contentType : "application/json;charset=utf8",
+			success:function(response){
+				// 接收并处理后端返回的响应e'd'
+				if(response.result == "error"){
+					var errorMessage;
+					console.log(response.errorMsg);
+					if(response.msg == "passwordError"){
+						errorMessage = "密码错误";
+						field = "oldPassword";
+					}else if(response.msg == "passwordUnmatched"){
+						errorMessage = "密码不一致";
+						field = "newPassword";
+					}
+					
+					$("#oldPassword").val("");
+					$("#newPassword").val("");
+					$("#newPassword_re").val("");
+					bv.updateMessage(field,'callback',errorMessage);
+					bv.updateStatus(field,'INVALID','callback');
+				}else{
+					// 否则更新成功，弹出模态框并清空表单
+					$('#passwordEditSuccess').modal('show');
+					$('#reset').trigger("click");
+					$('#form').bootstrapValidator("resetForm",true); 
+				}
+				
+			},
+			error:function(response){
+				//window.location.href = "./";
+		//		location.reload();
+			}
+		});
 	
 	}
 	
