@@ -59,7 +59,13 @@
 		}
 		return temp;
 	}
-
+	
+	//添加到数据库里
+	function addStorage(){
+		
+	
+	}
+	
 	// 表格初始化
 	function storageListInit() {
 		$('#storageList')
@@ -291,73 +297,67 @@
 				
                    
                     <div class="form-group">
-                    	<label for="storageId" class="control-label">机料物代码</label>
-                    	<input type="text" class="form-control" id="storageId" >
+                    	<label for="materialId" class="control-label">机料物代码</label>
+                    	<input type="text" class="form-control" id="materialId" >
                     </div>
                     <div class="form-group">
-                    	<label for="storageId" class="control-label">亚纶代码</label>
-                    	<input type="text" class="form-control" id="storageId" >
-                    </div>
-                    
-                    <div class="form-group">
-                    	<label for="" class="control-label">名称</label>
-                    	<input type="text" class="form-control" id="" >
+                    	<label for="viceId" class="control-label">亚纶代码</label>
+                    	<input type="text" class="form-control" id="viceId" >
                     </div>
                     
                     <div class="form-group">
-                    	<label for="" class="control-label">规格</label>
-                    	<input type="text" class="form-control" id="" >
+                    	<label for="materialName" class="control-label">名称</label>
+                    	<input type="text" class="form-control" id="materialName" >
                     </div>
                     
                     <div class="form-group">
-                    	<label for="" class="control-label">仓位</label>
-                    	<input type="text" class="form-control" id="" >
-                    </div>
-                    
-                   
-                    <div class="form-group">
-                        <label for="other" class="control-label">备注:</label>
-                        <textarea class="form-control" id="other" ></textarea>
+                    	<label for="materialSpec" class="control-label">规格</label>
+                    	<input type="text" class="form-control" id="materialSpec" >
                     </div>
                     
                     <div class="form-group">
-                    	<label for="" class="control-label">物料种类</label>
-                    	<input type="text" class="form-control" id="" >
-                    </div>
-                    
-                    <div class="form-group">
-                    	<label for="" class="control-label">单位</label>
-                    	<input type="text" class="form-control" id="" >
-                    	<label for="" class="control-label">单价</label>
-                    	<input type="text" class="form-control" id="" >
+                    	<label for="warehousePosition" class="control-label">仓位</label>
+                    	<input type="text" class="form-control" id="warehousePosition" >
                     </div>
                     
                    
-                    
                     <div class="form-group">
-                    	<label for="" class="control-label">剩余数量</label>
-                    	<input type="text" class="form-control" id="" >
+                        <label for="plus" class="control-label">备注:</label>
+                        <textarea class="form-control" id="plus" ></textarea>
                     </div>
                     
                     <div class="form-group">
-                    	<label for="" class="control-label">安全库存</label>
-                    	<input type="text" class="form-control" id="" >
+                    	<label for="materialType" class="control-label">物料种类</label>
+                    	<input type="text" class="form-control" id="materialType" >
                     </div>
                     
                     <div class="form-group">
-                    	<label for="" class="control-label">批次管理</label>
-                    	<input type="text" class="form-control" id="" >
+                    	<label for="materialUnit" class="control-label">单位</label>
+                    	<input type="text" class="form-control" id="materialUnit" >
+                    	<label for="materialPrice" class="control-label">单价</label>
+                    	<input type="text" class="form-control" id="materialPrice" >
+                    </div>
+                    
+                   
+                    
+                    <div class="form-group">
+                    	<label for="stockNumber" class="control-label">剩余数量</label>
+                    	<input type="text" class="form-control" id="stockNumber" >
                     </div>
                     
                     <div class="form-group">
-                    	<label for="" class="control-label">创建时间</label>
-                    	<input type="text" class="form-control" id="" >
+                    	<label for="stockSafe" class="control-label">安全库存</label>
+                    	<input type="text" class="form-control" id="stockSafe" >
                     </div>
                     
                     <div class="form-group">
-                    	<label for="" class="control-label">创建人</label>
-                    	<input type="text" class="form-control" id="" >
+                    	<label for="batchManage" class="control-label">批次管理</label>
+                    	<input type="text" class="form-control" id="batchManage" >
                     </div>
+                    
+                    
+                    
+                  
                     <div class="text-right">
                         <span id="returnMessage" class="glyphicon"> </span>
                         <button type="button" class="btn btn-default right" data-dismiss="modal">关闭</button>
