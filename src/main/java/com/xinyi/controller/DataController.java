@@ -19,4 +19,13 @@ public class DataController {
 		System.out.println(result);
 		return result;
 	}
+	
+	@RequestMapping(value="/getmodifyhistory",produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String getmodifyhistory() throws JsonProcessingException {
+		String result =  MaterialDataService.getmodifyhistoryInfo();
+		System.out.println("control"+result);
+		return result;
+	}
+	
 }

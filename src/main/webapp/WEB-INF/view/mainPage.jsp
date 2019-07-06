@@ -254,7 +254,7 @@ pageEncoding="UTF-8"%>
                                         <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/userOperationRecorderManagement.html">系统日志</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/ScanQrCode.html">扫描二维码</a>
+                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/ScanQrCode.html">入库出库</a>
                                     </li>
                                 
                             </ul>

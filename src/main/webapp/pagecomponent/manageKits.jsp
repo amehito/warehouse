@@ -109,34 +109,41 @@
 						{
 							columns : [
 									{
-										field : 'id',
-										title : '零件ID'
+										field : 'materialid',
+										title : '零件ID',
+										visible:false
 									//sortable: true
 									},
 									{
-										field : 'goodsName',
+										field : 'modifyname',
+										title : '存入/取走'
+									},
+									{
+										field : 'materialname',
 										title : '零件名称'
 									},									
 									{
-										field : 'goodsSize',
-										title : '货物尺寸',
-										visible : false
+										field : 'materialunit',
+										title : '单位'
 									},
 									
 									{
-										field : 'repositoryID',
-										title : '仓库ID',
-										visible : false
+										field : 'materialnumber',
+										title : '数量'
 									},
 									{
-										field : 'resultNumber',
-										title : '库存数量'
+										field : 'modifymanager',
+										title : '操作人'
+									},
+									{
+										field : 'modifytime',
+										title : 'time'
 									},
 									{
 										field : 'operation',
 										title : '操作',
 										formatter : function(value, row, index) {
-											var s = '<button class="btn btn-info btn-sm edit"><span>详细</span> </button><button class="btn btn-danger btn-sm delete"><span>删除</span></button>';
+											var s = '<button class="btn btn-info btn-sm edit"><span>详细</span> </button>';
 											var fun = '';
 											return s;
 										},
@@ -146,13 +153,10 @@
 													row, index) {
 												rowDetailOperation(row);
 											},
-											'click .delete':function(e,value,row,index){
-												console.log({e,value,row,index});
-												
-											}
+											
 										}
 									} ],
-							url : 'data/importKits.json',
+							url : 'Material/getmodifyhistory',
 							sortable: false,   
 					        pageList : [ 1,5,10],
 					        pageSize : 10,
