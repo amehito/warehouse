@@ -137,7 +137,7 @@
 									},
 									{
 										field : 'modifytime',
-										title : 'time'
+										title : '时间'
 									},
 									{
 										field : 'operation',
@@ -184,16 +184,17 @@
 
 	// 行编辑操作
 	function rowDetailOperation(row) {
+		console.log({row});
 		$('#detail_modal').modal("show");
 
 		// load info
-		$('#storage_goodsID').text(row.goodsID);
+		$('#storage_goodsID').text(row.modifyId);
 		$('#storage_goodsName').text(row.goodsName);
 		$('#storage_goodsType').text(row.goodsType);
 		$('#storage_goodsSize').text(row.goodsSize);
 		$('#storage_goodsValue').text(row.goodsValue);
 		$('#storage_repositoryBelong').text(row.repositoryID);
-		$('#storage_number').text(row.number);
+		$('#storage_number').text(row.materialnumber);
 	}
 
 	// 导出库存信息
