@@ -14,6 +14,26 @@
 		importStroageAction();
 		exportStorageAction()
 	})
+	function changeNumber(){
+		
+		var num = $('#change_storage_number').val();
+		var id = $('#storage_goodsID').html();
+		let data = {
+			stockNumber:num,
+			materialid:id
+		};
+		
+		
+		$.ajax({
+			url:"Material/changematerialnumber",
+			type:"POST",
+			data:data,
+			dataType:"json",
+			success:function(response){
+				console.log(response);
+			}
+		});
+	}
 
 	// 下拉框選擇動作
 	function optionAction() {
@@ -62,41 +82,28 @@
 	
 	//添加到数据库里
 	function addStorage(){
+		let data = {
+			materialId:$("#materialId").val(),
+			viceId:$("#viceId").val(),
+			materialName:$("#materialName").val(),
+			materialSpec:$("#materialSpec").val(),
+			warehousePosition:$("#warehouse").val(),
+			plus:$("#plus").val(),
+			materialType:$("#materialType").val(),
+			materialUnit:$("#materialUnit").val(),
+			materialPrice:$("#materialPrice").val(),
+			stockNumber:$("#stockNumber").val(),
+			stockSafe:$("#stockSafe").val(),
+			batchManage:$("#batchManage").val(),
+			createTime:'2005-1-1'
+		};
 		$.ajax({
-			type: "POST",
-			url:"material/addmaterial",
-			data:JSON.stringify(data),
+			url:"Material/addmaterial",
+			data:data,
+			type:"POST",
 			dataType:"json",
-			contentType : "application/json;charset=utf8",
 			success:function(response){
-				// 接收并处理后端返回的响应e'd'
-				if(response.result == "error"){
-					var errorMessage;
-					console.log(response.errorMsg);
-					if(response.msg == "passwordError"){
-						errorMessage = "密码错误";
-						field = "oldPassword";
-					}else if(response.msg == "passwordUnmatched"){
-						errorMessage = "密码不一致";
-						field = "newPassword";
-					}
-					
-					$("#oldPassword").val("");
-					$("#newPassword").val("");
-					$("#newPassword_re").val("");
-					bv.updateMessage(field,'callback',errorMessage);
-					bv.updateStatus(field,'INVALID','callback');
-				}else{
-					// 否则更新成功，弹出模态框并清空表单
-					$('#passwordEditSuccess').modal('show');
-					$('#reset').trigger("click");
-					$('#form').bootstrapValidator("resetForm",true); 
-				}
-				
-			},
-			error:function(response){
-				//window.location.href = "./";
-		//		location.reload();
+				console.log({response})
 			}
 		});
 	
@@ -188,13 +195,14 @@
 		$('#detail_modal').modal("show");
 
 		// load info
-		$('#storage_goodsID').text(row.modifyId);
-		$('#storage_goodsName').text(row.goodsName);
-		$('#storage_goodsType').text(row.goodsType);
-		$('#storage_goodsSize').text(row.goodsSize);
-		$('#storage_goodsValue').text(row.goodsValue);
-		$('#storage_repositoryBelong').text(row.repositoryID);
+		$('#storage_goodsID').text(row.materialid);
+		$('#storage_goodsName').text(row.modifyname);
+		$('#storage_goodsType').text(row.modifytime);
+		$('#storage_goodsSize').text(row.modifymanager);
+		$('#storage_goodsValue').text(row.materialname);
+		$('#storage_repositoryBelong').text(row.materialunit);
 		$('#storage_number').text(row.materialnumber);
+		$('#change_storage_number').val(row.materialnumber);
 	}
 
 	// 导出库存信息
@@ -434,28 +442,28 @@
 							<div class="row">
 								<div class="col-md-6 col-sm-6">
 									<div class="form-group">
-										<label for="" class="control-label col-md-6 col-sm-6"> <span>货物ID：</span>
+										<label for="" class="control-label col-md-6 col-sm-6"> <span>货物Id：</span>
 										</label>
 										<div class="col-md-4 col-sm-4">
 											<p id="storage_goodsID" class="form-control-static"></p>
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="" class="control-label col-md-6 col-sm-6"> <span>货物名称：</span>
+										<label for="" class="control-label col-md-6 col-sm-6"> <span>操作名称：</span>
 										</label>
 										<div class="col-md-4 col-sm-4">
 											<p id="storage_goodsName" class="form-control-static"></p>
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="" class="control-label col-md-6 col-sm-6"> <span>货物类型：</span>
+										<label for="" class="control-label col-md-6 col-sm-6"> <span>时间：</span>
 										</label>
 										<div class="col-md-4 col-sm-4">
 											<p id="storage_goodsType" class="form-control-static"></p>
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="" class="control-label col-md-6 col-sm-6"> <span>货物规格：</span>
+										<label for="" class="control-label col-md-6 col-sm-6"> <span>操作人：</span>
 										</label>
 										<div class="col-md-4 col-sm-4">
 											<p id="storage_goodsSize" class="form-control-static"></p>
@@ -464,7 +472,7 @@
 								</div>
 								<div class="col-md-6 col-sm-6">
 									<div class="form-group">
-										<label for="" class="control-label col-md-6 col-sm-6"> <span>货物价值：</span>
+										<label for="" class="control-label col-md-6 col-sm-6"> <span>货物：</span>
 										</label>
 										<div class="col-md-4 col-sm-4">
 											<p id="storage_goodsValue" class="form-control-static"></p>
@@ -478,12 +486,19 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="" class="control-label col-md-6 col-sm-6"> <span>库存数量：</span>
+										<label for="" class="control-label col-md-6 col-sm-6"> <span>数量：</span>
 										</label>
 										<div class="col-md-4 col-sm-4">
 											<p id="storage_number" class="form-control-static"></p>
 										</div>
 									</div>
+									<!-- <div class="form-group">
+										<label for="" class="control-label col-md-6 col-sm-6"> <span>修改数量：</span>
+										</label>
+										<div class="col-md-4 col-sm-4">
+											<input id="change_storage_number" class="form-control"></input>
+										</div>
+									</div> -->
 								</div>
 							</div>
 						</form>
@@ -491,6 +506,9 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+				<!-- <button class="btn btn-default" type="button" onclick="changeNumber()">
+					<span>修改</span>
+				</button> -->
 				<button class="btn btn-default" type="button" data-dismiss="modal">
 					<span>关闭</span>
 				</button>

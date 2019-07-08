@@ -13,7 +13,8 @@
         userOperationRecordTableInit();
         searchActionInit();
     })
-
+	
+    
     // 鏃ユ湡閫夋嫨鍣ㄥ垵濮嬪寲
 	function datePickerInit(){
 		$('.form_date').datetimepicker({
@@ -41,7 +42,9 @@
 	            title : '管理员编号'
 	        },{
 	            field : 'userName',
-	            title : '管理员姓名'
+	            title : '管理员姓名',
+	            visible:false,
+	            
 	        },{
 	            field : 'materialName',
 	            title : '零件名'
@@ -52,11 +55,11 @@
 	            field : 'stockNumber',
 	            title : '剩余数量',
 	           	formatter:function(value,row,index){
-	           		console.log({value,row,index});
+	           	
 	           		var s = `<button class="btn btn-success" type="button">
 	           				${"${value}"}
 	          			 	 </button>`;
-	          		console.log(row.stockSafe);
+	          		
 	           		if(value>=row.stockSafe)
 		           		return s;
 	           		var t =  `<button class="btn btn-danger" type="button">
@@ -113,21 +116,45 @@
 	}
 
 	// 琛ㄦ牸鍒锋柊
-	function tableRefresh() {
-		$('#userOperationRecordTable').bootstrapTable('refresh', {
-			query : {}
+	
+
+	function tableRefresh(search_user_id) {
+		
+		let filterdata = [];
+		$.ajax({
+			url:'Material/getMaterialInfo',
+			method:'post',
+			success:function(response){
+			
+	//		console.log({search_user_id});
+			response = response.filter(function(key){
+	//			console.log(key)
+				return key.materialId === search_user_id;
+			});		
+			console.log({response});
+			
+			filterdata = JSON.stringify(response);
+			filterdata=eval(filterdata);
+			console.log({filterdata});
+			
+			$('#userOperationRecordTable').bootstrapTable('load', filterdata);
+
+			}
 		});
+		
 	}
+	
 
 	// 鍒嗛〉鏌ヨ鍙傛暟
 	function queryParams(params) {
-		var temp = {
+		var temp = {/* 
 			limit : params.limit,
-			offset : params.offset,
-			userID : search_user_id,
-			startDate : search_start_date,
-			endDate : search_end_date
+			offset : params.offset, */
+			materialId : search_user_id,
+	/* 		startDate : search_start_date,
+			endDate : search_end_date */
 		}
+		
 		return temp;
 	}
 
@@ -137,7 +164,7 @@
             search_user_id = $('#user_id').val();
             search_start_date = $('#start_date').val();
             search_end_date = $('#end_date').val();
-            tableRefresh();
+            tableRefresh(search_user_id);
         })
     }
 </script>
@@ -147,22 +174,23 @@
     </ol>
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-3">
+           <div class="col-md-3" >
                 <form action="" class="form-inline">
                     <div class="form-group">
-                        <label class="form-label">用户ID</label>
+                        <label class="form-label">零件编号</label>
                         <input type="text" id="user_id" class="form-control" placeholder="用户ID" style="width:50%">
                     </div>
                 </form>
             </div>
-            <div class="col-md-7">
+            
+       <!--      <div class="col-md-7">
                 <form action="" class="form-inline">
                     <label class="form-label">日期范围</label>
                     <input class="form_date form-control" id="start_date" placeholder="开始日期">
                     <label class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;</label>
                     <input class="form_date form-control" id="end_date" placeholder="结束日期">
                 </form>
-            </div>
+            </div> -->
             <div class="col-md-2">
                 <button class="btn btn-success" id="search_button">
                     <span class="glyphicon glyphicon-search"></span> <span>查询</span>
