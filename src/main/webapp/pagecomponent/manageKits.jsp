@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<script src="./js/toExcel.js"></script>
 <script>
 	var search_type_storage = "none";
 	var search_keyWord = "";
@@ -13,6 +13,7 @@
 		storageListInit();
 		importStroageAction();
 		exportStorageAction()
+		
 	})
 	function changeNumber(){
 		
@@ -82,6 +83,7 @@
 	
 	//添加到数据库里
 	function addStorage(){
+		let date = new Date();
 		let data = {
 			materialId:$("#materialId").val(),
 			viceId:$("#viceId").val(),
@@ -95,18 +97,19 @@
 			stockNumber:$("#stockNumber").val(),
 			stockSafe:$("#stockSafe").val(),
 			batchManage:$("#batchManage").val(),
-			createTime:'2005-1-1'
+			createTime:date
 		};
 		$.ajax({
 			url:"Material/addmaterial",
 			data:data,
 			type:"POST",
-			dataType:"json",
-			success:function(response){
-				console.log({response})
+			dataType:"text",
+			success:function(data){
+				alert(data);
+				console.log({data});
 			}
 		});
-	
+		$("#closeModal").click();
 	}
 	
 	// 表格初始化
@@ -207,17 +210,23 @@
 
 	// 导出库存信息
 	function exportStorageAction() {
+		var data;
 		$('#export_storage').click(function() {
 			$('#export_modal').modal("show");
 		})
 
 		$('#export_storage_download').click(function(){
-			var data = {
-				searchType : search_type_storage,
-				keyword : search_keyWord
-			}
-			var url = "storageManage/exportStorageRecord?" + $.param(data)
-			window.open(url, '_blank');
+			
+			$.ajax({
+				url:"Material/getmodifyhistory",
+				type:"POST",
+				dataType:"JSON",
+				success:function(response){
+					data = eval(response);
+					console.log({data}+"success");
+					JSONToExcelConvertor(data);
+				}
+			});
 			$('#export_modal').modal("hide");
 		})
 	}
@@ -409,7 +418,7 @@
                   
                     <div class="text-right">
                         <span id="returnMessage" class="glyphicon"> </span>
-                        <button type="button" class="btn btn-default right" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-default right" data-dismiss="modal" id="closeModal">关闭</button>
                         <button id="submitBtn" type="button" class="btn btn-primary" onclick="addStorage()" >添加</button>
                     </div>
                 

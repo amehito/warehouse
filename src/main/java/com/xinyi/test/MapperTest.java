@@ -1,5 +1,7 @@
 package com.xinyi.test;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class MapperTest {
 		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
 		XinyiMaterialMapper Mapper = sqlSession.getMapper(XinyiMaterialMapper.class);
 		XinyiMaterial record = new XinyiMaterial();
-		record.setMaterialId("10000000006");
+		record.setMaterialId("10000000011");
 		record.setViceId("AC0003");
 		record.setMaterialName("测试名称2");
 		record.setMaterialSpec("测试规格0002");
@@ -70,15 +72,13 @@ public class MapperTest {
 	
 	@Test
 	public void tt() throws InterruptedException {
+		XinyiUserMapper xinyiUserMapper;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		TimeZone zone = TimeZone.getDefault();
+		format.setTimeZone(zone);
 		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
-		XinyiUserMapper mapper = sqlSession.getMapper(XinyiUserMapper.class);
-		XinyiUser record = new XinyiUser();
-		record.setUserUsername("test2");
-		record.setUserPassword("123456");
-		System.out.println("插入前为"+record.getUserId());
-		mapper.insert(record);
-		sqlSession.commit();
-		System.out.println(record.getUserId());
+		XinyiMaterialMapper Mapper = sqlSession.getMapper(XinyiMaterialMapper.class);
+		System.out.println(Mapper.selectAll().size());
 	}
 	
 	
