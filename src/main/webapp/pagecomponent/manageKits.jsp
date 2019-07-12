@@ -6,8 +6,9 @@
 	var search_keyWord = "";
 	var select_goodsID;
 	var select_repositoryID;
-
+	var material_data ;
 	$(function() {
+		tableDataInit();
 		optionAction();
 		searchAction();
 		storageListInit();
@@ -15,6 +16,19 @@
 		exportStorageAction()
 		
 	})
+	
+	function tableDataInit() {
+		$.ajax({
+			url:"Material/getmodifyhistory",
+			type:"GET",
+			dataType:"JSON",
+			success:function(data){
+				material_data = data;
+				console.log({material_data});
+			}
+		})
+	}
+	
 	function changeNumber(){
 		
 		var num = $('#change_storage_number').val();
@@ -100,7 +114,7 @@
 			createTime:date
 		};
 		$.ajax({
-			url:"Material/addmaterial",
+			url:"Material/changematerialnumber",
 			data:data,
 			type:"POST",
 			dataType:"text",
@@ -187,9 +201,19 @@
 
 	// 表格刷新
 	function tableRefresh() {
-		$('#storageList').bootstrapTable('refresh', {
-			query : {}
+		let keyWords = $("#search_input_type").val();
+		console.log({keyWords});
+		let filtedDate = [];
+		filtedDate = material_data.filter(function(key){
+			return key.materialid ===keyWords || key.materialname ===keyWords || key.modifymanager === keyWords
 		});
+		
+		filtedDate = JSON.stringify(filtedDate);
+		filtedDate = eval(filtedDate);
+		console.log({filtedDate})
+		$("#search_input_type").val(" ");
+	//	$("#search_input_type").attr("placeholder",keyWords);
+		$('#storageList').bootstrapTable('load',filtedDate);
 	}
 
 	// 行编辑操作
