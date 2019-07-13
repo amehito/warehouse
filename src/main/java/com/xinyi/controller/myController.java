@@ -1,12 +1,17 @@
 package com.xinyi.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.connector.Response;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -17,19 +22,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.mysql.cj.Session;
 import com.xinyi.bean.XinyiUser;
 import com.xinyi.bean.XinyiUserExample;
 import com.xinyi.bean.XinyiUserExample.Criteria;
 import com.xinyi.dao.XinyiUserMapper;
 import com.xinyi.test.User;
+import com.xinyi.utils.MatrixToImageWriter;
 import com.xinyi.utils.MybatisOfSpringUtil;
 
 
 @Controller
 public class myController {
 	
+	@RequestMapping("/test/qr-img")
+	@ResponseBody
+	public void getQRCode(String code_url, HttpServletResponse response) {   
+        encodeQrcode("123", response);
+   }
 	
+	
+	 private void encodeQrcode(String content, HttpServletResponse response) {    
+	        if (StringUtils.isEmpty(content))        return;    
+	        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();    
+	        Map hints = new HashMap();    
+	        //设置字符集编码类型  
+	        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8"); 
+	        //设置二维码四周的白色边框 ,默认是4,默认为4的时候白色边框实在是太粗了   
+	        hints.put(EncodeHintType.MARGIN, 0);
+	        BitMatrix bitMatrix = null;    
+	        try {        
+	                bitMatrix = multiFormatWriter.encode(content, BarcodeFormat.QR_CODE, 190, 190, hints);      
+	                BufferedImage image = MatrixToImageWriter.toBufferedImage(bitMatrix);   
+	                //输出二维码图片流      
+	                try {          
+	                      ImageIO.write(image, "png", response.getOutputStream());     
+	                     } catch (IOException e) {       
+	                           // TODO Auto-generated catch block      
+	                            e.printStackTrace();    
+	                           }  
+	                     } catch (WriterException e1) {     
+	                           // TODO Auto-generated catch block       
+	                           e1.printStackTrace();   
+	                     }
+	  }
+
+
 	@RequestMapping(value="/subLogin",method=RequestMethod.POST
 			,produces="application/json;charset=utf-8")
 	
