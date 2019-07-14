@@ -21,7 +21,7 @@ public class DataController {
 	@ResponseBody
 	public String getMaterialInfo() throws JsonProcessingException {
 		String result =  MaterialDataService.getMaterialInfo();
-		System.out.println(result);
+		System.out.println("done:getmaterialInfo");
 		return result;
 	}
 	
@@ -29,7 +29,7 @@ public class DataController {
 	@ResponseBody
 	public String getmodifyhistory() throws JsonProcessingException {
 		String result =  MaterialDataService.getmodifyhistoryInfo();
-		System.out.println("control"+result);
+		System.out.println("done:getmodifyhistory");
 		return result;
 	}
 	

@@ -32,7 +32,7 @@ public class MaterialDataService {
 		ArrayList<XinyiMaterial> list = (ArrayList<XinyiMaterial>) mapper.selectAll();	
 		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		String result = jsonCreater.writeValueAsString(list);
-		System.out.println("service"+result);
+	//	System.out.println("service"+result);
 		return result; 
 		
 	}

@@ -205,7 +205,7 @@
 		console.log({keyWords});
 		let filtedDate = [];
 		filtedDate = material_data.filter(function(key){
-			return key.materialid ===keyWords || key.materialname ===keyWords || key.modifymanager === keyWords
+			return key.materialid ===keyWords || key.materialname ===keyWords || key.modifymanager === keyWords`
 		});
 		
 		filtedDate = JSON.stringify(filtedDate);
