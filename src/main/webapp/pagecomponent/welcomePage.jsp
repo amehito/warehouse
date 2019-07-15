@@ -10,8 +10,16 @@ function quickAccessInit(){
     <!--为class为shortcut绑定上点击事件-->
 	$('.shortcut').click(function(){
 		var title = $(this).find('.title').text();
-		var url = $('.menu_item:contains('+ title + ')').attr('name');
+		var url;
+		if(title ==='库存查询')
+			url = "pagecomponent/goodsSearch.jsp";	
+		else if(title ==='货物入库')
+			url = "pagecomponent/stock-inManagement.jsp";
+		else if (title==='货物出库')
+			url = "pagecomponent/stock-outManagement.jsp";
+	//	var url = $('.menu_item:contains('+ title + ')').attr('name');
 		$('#panel').load(url);
+		console.log({title,url});
 	})
 }
 </script>

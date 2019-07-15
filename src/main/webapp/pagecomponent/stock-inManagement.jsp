@@ -217,7 +217,7 @@ function detilInfoToggle(){
 function repositorySelectorInit(){
 	$.ajax({
 		type : 'GET',
-		url : 'repositoryManage/getRepositoryList',
+		url : 'OtherInfo/manufactures',
 		dataType : 'json',
 		contentType : 'application/json',
 		data : {
@@ -227,9 +227,14 @@ function repositorySelectorInit(){
 			limit : -1
 		},
 		success : function(response){
-			$.each(response.rows,function(index,elem){
-				$('#repository_selector').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+			console.log({response});
+			$.each(response,function(index,elem){
+			//	String index = `<option value=''></option>`;
+			//	$("#repository_selector").append()
+				console.log({response,index,elem})
+				$('#repository_selector').append("<option value='" + elem.name + "'>" + elem.name +"</option>");
 			});
+			
 		},
 		error : function(response){
 			$('#repository_selector').append("<option value='-1'>加载失败</option>");
@@ -363,12 +368,12 @@ function infoModal(type, msg) {
 								<div class="row">
 									<div class="col-md-1 col-sm-1"></div>
 									<div class="col-md-10 col-sm-11">
-										<!-- <form action="" class="form-inline">
+										 <form action="" class="form-inline">
 											<div class="form-group">
 												<label for="" class="form-label">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;供应商：</label>
 												<input type="text" class="form-control" id="supplier_input" placeholder="请输入供应商名称">
 											</div>
-										</form> -->
+										</form> 
 									</div>
 								</div>
 							</div>
@@ -528,14 +533,14 @@ function infoModal(type, msg) {
 								<div class="row">
 									<div class="col-md-1 col-sm-1"></div>
 									<div class="col-md-10 col-sm-11">
-										<!-- <form action="" class="form-inline">
+										 <form action="" class="form-inline">
 											<div class="form-group">
-												<label for="" class="form-label">入库仓库：</label>
+												<label for="" class="form-label">厂家：</label>
 												<select name="" id="repository_selector" class="form-control">
-													<option value="">请选择仓库</option>
+													<option value="">请选择厂家</option>
 												</select>
 											</div>
-										</form> -->
+										</form> 
 									</div>
 								</div>
 							</div>

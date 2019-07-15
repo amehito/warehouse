@@ -23,5 +23,6 @@
 <mapper resource="com/xinyi/mapper/XinyiUserRoleMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiMaterialMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiModifyhistoryMapper.xml" />
+<mapper resource="com/xinyi/mapper/XinyiManufacturesMapper.xml" />
 </mappers>
 </configuration>

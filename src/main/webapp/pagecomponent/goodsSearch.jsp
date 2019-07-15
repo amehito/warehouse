@@ -39,10 +39,10 @@
 	            title : '零件编号'
 	        },{
 	            field : 'createManager',
-	            title : '管理员编号'
+	            title : '管理员姓名'
 	        },{
 	            field : 'userName',
-	            title : '管理员姓名',
+	            title : '用户姓名',
 	            visible:false,
 	            
 	        },{
@@ -74,7 +74,7 @@
 	        }],
 	        url:'Material/getMaterialInfo',
 	        sortable: true,   
-	        pageList : [ 1,5,10],
+	        pageList : [ 10,20,50],
 	        pageSize : 10,
 	        sidePagination: "client",  
 	        clickToSelect : true,
@@ -129,7 +129,7 @@
 	//		console.log({search_user_id});
 			response = response.filter(function(key){
 	//			console.log(key)
-				return key.materialId === search_user_id;
+				return key.materialId === search_user_id ||(key.materialName.search(search_user_id)!=-1);
 			});		
 			console.log({response});
 			
@@ -177,7 +177,7 @@
            <div class="col-md-3" >
                 <form action="" class="form-inline">
                     <div class="form-group">
-                        <label class="form-label">零件编号</label>
+                        <label class="form-label">关键字</label>
                         <input type="text" id="user_id" class="form-control" placeholder="用户ID" style="width:50%">
                     </div>
                 </form>

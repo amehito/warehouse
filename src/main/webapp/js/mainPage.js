@@ -41,7 +41,8 @@ function signOut() {
 			contentType : "application/json",
 			success:function(response){
 				//刷新
-				window.location.reload(true);
+				console.log('退出');
+				window.location.href="login-page.html";
 			},error:function(response){
 				
 			}

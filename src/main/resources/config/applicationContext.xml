@@ -21,6 +21,7 @@
         <property name="filterChainDefinitions" >
         	<value>
         		/Material/* = rolesOr["admin","user"]
+        		/OtherInfo/* = rolesOr["admin","user"]
         		/test/* = anon
         		/account/* = anon
         		/login-page.html = anon
@@ -50,6 +51,7 @@
     </bean>
     <!-- 注入mapper -->
    
+ 
     
 </beans>
 

@@ -1,5 +1,7 @@
 package com.xinyi.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -20,16 +22,19 @@ public class DataController {
 	@RequestMapping(value="/getMaterialInfo",produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String getMaterialInfo() throws JsonProcessingException {
+		System.out.println(new Date().toString()+"start:getMaterialInfo");
 		String result =  MaterialDataService.getMaterialInfo();
-		System.out.println("done:getmaterialInfo");
+		System.out.println(new Date().toString()+"done:getMaterialInfo");
 		return result;
 	}
 	
 	@RequestMapping(value="/getmodifyhistory",produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String getmodifyhistory() throws JsonProcessingException {
+		System.out.println(new Date().toString()+"start:getModifyhistory");
 		String result =  MaterialDataService.getmodifyhistoryInfo();
-		System.out.println("done:getmodifyhistory");
+		
+		System.out.println(new Date().toString()+"done:getmodifyhistory");
 		return result;
 	}
 	

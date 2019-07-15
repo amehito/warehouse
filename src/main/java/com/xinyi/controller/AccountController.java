@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.LogoutAware;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +36,27 @@ import com.xinyi.utils.MybatisOfSpringUtil;
 @RequestMapping("/account")
 public class AccountController {
 	
-	ResponseUtil responseUtil ;
+	ResponseUtil  responseUtil = new ResponseUtil();;
 	
+	@RequestMapping("/logout")
+	public
+    @ResponseBody
+    Map<String, Object> logout() {
+        // 初始化 Response
+        Response response = responseUtil.newResponseInstance();
+
+        Subject currentSubject = SecurityUtils.getSubject();
+        if (currentSubject != null && currentSubject.isAuthenticated()) {
+            // 执行账户注销操作
+            currentSubject.logout();
+            response.setResponseResult(Response.RESPONSE_RESULT_SUCCESS);
+        } else {
+            response.setResponseResult(Response.RESPONSE_RESULT_ERROR);
+            response.setResponseMsg("did not login");
+        }
+
+        return response.generateResponse();
+    }
 	@RequestMapping(value = "passwordModify", method = RequestMethod.POST)
     
      @ResponseBody
@@ -42,7 +64,7 @@ public class AccountController {
                                        HttpServletRequest request) {
 		System.out.println(passwordInfo);
         //初始化 Response
-		responseUtil = new ResponseUtil();
+		
 		
 		Response responseContent = responseUtil.newResponseInstance();
 
