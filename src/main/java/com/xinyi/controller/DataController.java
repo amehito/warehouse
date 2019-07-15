@@ -58,4 +58,6 @@ public class DataController {
 		System.out.println("controlresult"+result);
 		return result;
 	}
+	
+	
 }

@@ -20,10 +20,11 @@
         
         <property name="filterChainDefinitions" >
         	<value>
-        		/Material/* = rolesOr["admin","user"]
+        		/Material/* = anon
         		/OtherInfo/* = rolesOr["admin","user"]
         		/test/* = anon
         		/account/* = anon
+        		/picking.html = anon
         		/login-page.html = anon
         		/login.html=anon
         		/subLogin = anon

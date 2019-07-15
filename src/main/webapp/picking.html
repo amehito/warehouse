@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			html,body{
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				margin: 0;
+			}
+			.picking{
+				width: 80%;
+				height: 100%;
+				margin: 0 auto;
+				display: flex;
+				align-items: center;
+			}
+			
+			.pickingInformation{
+				width: 50%;
+				height: 100%;
+				background-color: antiquewhite;
+				display: flex;
+				flex-direction: column;
+			}
+			.pickingInformation h1{
+				text-align: center;
+			}
+			
+			.pickingInformation_table{
+				width: 100%;
+			}
+			.picking_table{
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+			}
+			.picking_table table{
+				width: 80%;
+			}
+			.picking_table td{
+			width:160px;
+			height:30px;
+			font-size:20px;
+		}
+		input{
+			width: 100%;
+			height: 100%;
+			font-size: 15px;
+			text-align: center;
+		}
+		.btnn{
+			height: 50px;
+			width: 100px;
+			background-color: #1ABC9C;
+			color: white;
+			text-align: center;
+			line-height: 50px;
+			margin: 20px auto;
+		}
+		.btnn:hover{
+			background-color: #ffBC9C;
+			color: black;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="picking">
+		<div class="pickingInformation">
+			<h1>物品列表</h1>
+			<table id="pickingInformation_table" class="pickingInformation_table">
+				<tr align=center>
+					<td>名称</td>
+					<td>编号</td>
+					<td>数量</td>
+					<td>单位</td>
+					<td></td>
+				</tr>
+				
+			</table>
+			
+		</div>
+		<div class="picking_table">
+			<table  border=1; cellpadding=12; cellspacing=0; align=center>
+				<tr align=center>
+					<td colspan="4">领料单</td>
+				</tr>
+				<tr align=center>
+					<td>领料人姓名:</td>
+					<td colspan="3"><input type="text" style="border: 0px;" value="" /></td>
+					
+				</tr>
+				<tr align=center>
+					<td>领料日期:</td>
+					<td colspan="3"><input type="text" style="border: 0px;" value="" /></td>
+				</tr>
+				
+				<tr align=center>
+					<td colspan="4">领料信息</td>
+				</tr>
+				<tr align=center>
+					<td>物品名称</td>
+					<td>物品编号</td>
+					<td>数量</td>
+					<td>单位</td>
+				</tr>
+				<tr align=center>
+					<td><input type="text" style="border: 0px;" value="" id="name1" oninput="pickingInformation(1)"/></td>
+					<td id="id1"></td>
+					<td><input type="text" style="border: 0px;" value="" id="num1"/></td>
+					<td id="unit1"></td>
+				</tr>
+				<tr align=center>
+					<td><input type="text" style="border: 0px;" value="" id="name" oninput="pickingInformation(2)"/></td>
+					<td></td>
+					<td><input type="text" style="border: 0px;" value="" id="num"/></td>
+					<td></td>
+				</tr>
+				<tr align=center>
+					<td><input type="text" style="border: 0px;" value="" id="name" oninput="pickingInformation(3)"/></td>
+					<td></td>
+					<td><input type="text" style="border: 0px;" value="" id="num"/></td>
+					<td></td>
+				</tr>
+				
+			</table>
+			<button class="btnn">
+				提交
+			</button>
+		</div>
+		
+		</div>
+	</body>
+	<script type="text/javascript" src="./js/jquery-2.2.3.min.js"></script>
+	<script type="text/javascript">
+		var flag=0;
+		function pickingInformation(i){
+			flag=i;
+			var search_user_id=document.getElementById('name1').value;
+			$.ajax({
+			url:'Material/getMaterialInfo',
+			method:'post',
+			success:function(response){
+			
+	//		console.log({search_user_id});
+			response = response.filter(function(key){
+	//			console.log(key)
+				return key.materialId === search_user_id ||(key.materialName.search(search_user_id)!=-1);
+			});		
+			console.log({response});
+			console.log({search_user_id});
+			var pickingInformation_table=document.getElementById('pickingInformation_table');
+			if(response.length>5000){
+				response = response.slice(0,50);
+			}
+			for(var i=0;i<response.length;i++){
+				pickingInformation_table.innerHTML+='<tr align=center><td id="name_tab'+i+'">'+response[i].materialName+'</td>'+
+					'<td id="name_id'+i+'">'+response[i].materialId+'</td>'+
+					'<td id="name_num'+i+'">'+response[i].stockNumber+'</td>'+
+					'<td id="name_unit'+i+'">'+response[i].materialUnit+'</td>'+
+					'<td><button  onclick="addTo('+i+')">添加</button></td></tr>';
+			} 
+
+			}
+		});
+
+		}
+		function addTo(i){
+			var name_tab=document.getElementById('name_tab'+i);
+			var name_id=document.getElementById('name_id'+i);
+			var name_num=document.getElementById('name_num'+i);
+			var name_unit=document.getElementById('name_unit'+i);
+			document.getElementById('name'+flag).value=name_tab.innerText;
+			document.getElementById('id'+flag).innerText=name_id.innerText;
+			document.getElementById('num'+flag).value=name_num.innerText;
+			document.getElementById('unit'+flag).innerText=name_unit.innerText;
+		}
+	</script>
+</html>
