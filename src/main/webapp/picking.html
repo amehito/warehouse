@@ -51,6 +51,9 @@
 			font-size: 15px;
 			text-align: center;
 		}
+		tr{
+			text-align: center;
+		}
 		.btnn{
 			height: 50px;
 			width: 100px;
@@ -83,62 +86,59 @@
 			
 		</div>
 		<div class="picking_table">
-			<table  border=1; cellpadding=12; cellspacing=0; align=center>
+			<table  border=1; cellpadding=12; cellspacing=0; align=center id="picking_table_tr">
 				<tr align=center>
-					<td colspan="4">领料单</td>
+					<td colspan="5">领料单</td>
 				</tr>
 				<tr align=center>
 					<td>领料人姓名:</td>
-					<td colspan="3"><input type="text" style="border: 0px;" value="" /></td>
+					<td colspan="4"><input type="text" style="border: 0px;" value="" id="userName"/></td>
 					
 				</tr>
 				<tr align=center>
 					<td>领料日期:</td>
-					<td colspan="3"><input type="text" style="border: 0px;" value="" /></td>
+					<td colspan="4"><input type="date" id="date_info" style="border: 0px;" value=""/></td>
 				</tr>
 				
 				<tr align=center>
-					<td colspan="4">领料信息</td>
+					<td colspan="5">领料信息</td>
 				</tr>
 				<tr align=center>
 					<td>物品名称</td>
 					<td>物品编号</td>
 					<td>数量</td>
 					<td>单位</td>
+					<td></td>
 				</tr>
+				<tbody id="picking_table_tbody">
 				<tr align=center>
-					<td><input type="text" style="border: 0px;" value="" id="name1" oninput="pickingInformation(1)"/></td>
+					<td><input type="text" style="border: 0px;" value="" id="name1" onfocus="demo(1)" oninput="pickingInformation(1)"/></td>
 					<td id="id1"></td>
 					<td><input type="text" style="border: 0px;" value="" id="num1"/></td>
 					<td id="unit1"></td>
+					<td><button onclick="Eliminate(this)" id="btn1" style="display: none; margin: 0 auto;">删除</button></td>
 				</tr>
-				<tr align=center>
-					<td><input type="text" style="border: 0px;" value="" id="name" oninput="pickingInformation(2)"/></td>
-					<td></td>
-					<td><input type="text" style="border: 0px;" value="" id="num"/></td>
-					<td></td>
-				</tr>
-				<tr align=center>
-					<td><input type="text" style="border: 0px;" value="" id="name" oninput="pickingInformation(3)"/></td>
-					<td></td>
-					<td><input type="text" style="border: 0px;" value="" id="num"/></td>
-					<td></td>
-				</tr>
+				</tbody>
 				
 			</table>
-			<button class="btnn">
+			
+			<button class="btnn" onclick="Submission()">
 				提交
 			</button>
 		</div>
 		
 		</div>
 	</body>
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="./js/jquery-2.2.3.min.js"></script>
 	<script type="text/javascript">
+		var tab_num=1;
+		var tab_num_flag=1;
+		//搜索
 		var flag=0;
 		function pickingInformation(i){
 			flag=i;
-			var search_user_id=document.getElementById('name1').value;
+			var search_user_id=document.getElementById('name'+i).value;
 			$.ajax({
 			url:'Material/getMaterialInfo',
 			method:'post',
@@ -155,6 +155,13 @@
 			if(response.length>5000){
 				response = response.slice(0,50);
 			}
+			pickingInformation_table.innerHTML="";
+			pickingInformation_table.innerHTML+='<tr align=center><td>名称</td>'+
+												'<td>编号</td>'+
+												'<td>数量</td>'+
+												'<td>单位</td>'+
+												'<td></td>'+
+												'</tr>';
 			for(var i=0;i<response.length;i++){
 				pickingInformation_table.innerHTML+='<tr align=center><td id="name_tab'+i+'">'+response[i].materialName+'</td>'+
 					'<td id="name_id'+i+'">'+response[i].materialId+'</td>'+
@@ -167,6 +174,7 @@
 		});
 
 		}
+		//添加
 		function addTo(i){
 			var name_tab=document.getElementById('name_tab'+i);
 			var name_id=document.getElementById('name_id'+i);
@@ -177,5 +185,76 @@
 			document.getElementById('num'+flag).value=name_num.innerText;
 			document.getElementById('unit'+flag).innerText=name_unit.innerText;
 		}
+		//日期
+		function data_val(){
+			var time = new Date();
+        	var day = ("0" + time.getDate()).slice(-2);
+        	var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        	var today = time.getFullYear() + "-" + (month) + "-" + (day);
+       		$('#date_info').val(today);
+		}
+		 $(document).ready(function () {
+        	var time = new Date();
+        	var day = ("0" + time.getDate()).slice(-2);
+        	var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        	var today = time.getFullYear() + "-" + (month) + "-" + (day);
+       		$('#date_info').val(today);
+    	})
+		 //增加单元格
+		 function demo(i){
+		 	if(i==tab_num){
+		 		var btn=document.getElementById('btn'+i);
+		 		btn.style.display="block";
+		 		tab_num++;
+		 		tab_num_flag++;
+		 		var picking_table_tr=document.getElementById('picking_table_tbody');
+		 		var R=document.createElement('tr');
+		 		R.innerHTML+='<td><input type="text" style="border: 0px;" value="" id="name'+tab_num+'" onfocus="demo('+tab_num+')" oninput="pickingInformation('+tab_num+')"/></td>'+
+					'<td id="id'+tab_num+'"></td>'+
+					'<td><input type="text" style="border: 0px;" value="" id="num'+tab_num+'"/></td>'+
+					'<td id="unit'+tab_num+'"></td>'+
+					'<td><button onclick="Eliminate(this)" id="btn'+tab_num+'" style="display: none;margin: 0 auto;">删除</button></td>';
+				picking_table_tr.appendChild(R);
+		 	}
+		 	
+		 }
+		 //删除
+		 function Eliminate(obj){
+		 	if(tab_num_flag>1){
+		 		var tr=obj.parentNode.parentNode;
+            	var tbody=tr.parentNode;
+            	tbody.removeChild(tr);
+            	tab_num_flag--;
+		 	}
+		 	 
+		 }
+		 //提交信息
+		 function Submission(){
+		 	var userName=document.getElementById('userName').value;
+		 	var time=document.getElementById('date_info').value;
+		 	var infos = new Array();
+		 	var x=0;
+		 	for(var i=1;i<=tab_num;i++){
+		 		
+		 		var name=document.getElementById('name'+i).value;
+		 		var id=document.getElementById('id'+i).innerText;
+		 		var num=document.getElementById('num'+i).value;
+		 		var unit=document.getElementById('unit'+i).innerText;
+		 		
+		 		if(name!=null&&name!=""){
+		 			var infoItem = {
+		 				material:name,
+		 				materialId:id,
+		 				number:num,
+		 				unit:unit
+		 			};
+		 			console.log(infoItem);
+					infos.splice(-1,0,infoItem);
+					x++;
+					console.log(infos);
+		 		}
+		 	}
+		 	console.log(JSON.stringify(infos));
+		 }
 	</script>
 </html>
