@@ -11,13 +11,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mysql.cj.protocol.x.Notice;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.service.MaterialDataService;
 import com.xinyi.test.ChangeMaterialInfo;
+import com.xinyi.test.notifyModel;
 
 @Controller
 @RequestMapping("/Material")
 public class DataController {
+	
+	@RequestMapping(value="/notify",produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String Notice(notifyModel info) {
+		if(info == null)
+			return "notice";
+		System.out.println(info);
+		return "success";
+		
+	}
 	
 	@RequestMapping(value="/getMaterialInfo",produces="application/json;charset=utf-8")
 	@ResponseBody

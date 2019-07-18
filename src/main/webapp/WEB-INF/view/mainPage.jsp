@@ -20,7 +20,6 @@ pageEncoding="UTF-8"%>
           href="./css/mainPage.css">
 </head>
 <body>
-
 <!-- 导航栏 -->
 <div id="navBar">
     <!-- 此处加载顶部导航栏 -->
@@ -310,6 +309,7 @@ pageEncoding="UTF-8"%>
     </div>
 </div>
 
+<div id="notifyPanel">hello</div>
 <span id="requestPrefix" class="hide">${sessionScope.requestPrefix}</span>
 
 <script type="text/javascript"
@@ -334,5 +334,7 @@ pageEncoding="UTF-8"%>
         src="./js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript"
         src="./js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="./js/notice.js"></script>
+        
 </body>
 </html>
