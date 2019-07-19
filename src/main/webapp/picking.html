@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
@@ -217,6 +217,7 @@
     	})
 		 //增加单元格
 		 function demo(i){
+			flag=i;
 		 	if(i==tab_num){
 		 		var btn=document.getElementById('btn'+i);
 		 		btn.style.display="block";
@@ -250,7 +251,7 @@
 		 	var infos = new Array();
 		 	var x=0;
 		 	for(var i=1;i<=tab_num;i++){
-		 		
+		 		if(!document.getElementById('name'+i)) continue;
 		 		var name=document.getElementById('name'+i).value;
 		 		var id=document.getElementById('id'+i).innerText;
 		 		var num=document.getElementById('num'+i).value;
@@ -270,6 +271,22 @@
 		 		}
 		 	}
 		 	console.log(JSON.stringify(infos));
+		 	
+		 	$.ajax({
+				type: "POST",
+				url: "Material/notify",//提交的接口
+				data: {
+					/*传值*/
+					user:userName,
+					Time:time,
+					materials:eval(infos)
+				},
+				async: true,
+				success: function(data) {
+					//提交成功
+					alert('提交成功！');
+				}
+			})
 		 }
 	</script>
 </html>

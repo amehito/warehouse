@@ -1,11 +1,19 @@
 package com.xinyi.test;
 
+import java.util.List;
+import java.util.Map;
+
 import com.xinyi.service.MaterialDataService;
 
 public class notifyModel {
 	private String admin;
 	private String Time;
-	private String[] Materials;
+	private List<Material> Materials;
+	
+	
+		
+		
+	
 	public String getAdmin() {
 		return admin;
 	}
@@ -18,11 +26,14 @@ public class notifyModel {
 	public void setTime(String time) {
 		Time = time;
 	}
-	public String[] getMaterials() {
+	public List<Material> getMaterials() {
 		return Materials;
 	}
-	public void setMaterials(String[] materials) {
+	public void setMaterials(List<Material> materials) {
 		Materials = materials;
 	}
+	
+	
+	
 	
 }
