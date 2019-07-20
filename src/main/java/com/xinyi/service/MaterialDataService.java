@@ -1,6 +1,7 @@
 package com.xinyi.service;
 
 import java.awt.List;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,13 +11,16 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xinyi.bean.Picking;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiModifyhistory;
 import com.xinyi.bean.XinyiUser;
+import com.xinyi.dao.PickingMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiModifyhistoryMapper;
 import com.xinyi.dao.XinyiUserMapper;
 import com.xinyi.test.ChangeMaterialInfo;
+import com.xinyi.test.notifyModel;
 import com.xinyi.utils.MybatisOfSpringUtil;
 
 
@@ -24,7 +28,7 @@ import com.xinyi.utils.MybatisOfSpringUtil;
 public class MaterialDataService {
 	public static ObjectMapper jsonCreater = new ObjectMapper();
 	static SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
-	
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
 	public static String getMaterialInfo() throws JsonProcessingException {
 		
 		
@@ -90,6 +94,20 @@ public class MaterialDataService {
 		record.setModifytime(new Date());
 		mapper.insert(record );
 		sqlSession.commit();
+		
+	}
+	public static void savePickRequest(notifyModel notify) throws ParseException, JsonProcessingException {
+		// TODO Auto-generated method stub
+		PickingMapper mapper = sqlSession.getMapper(PickingMapper.class);
+		Picking record = new Picking();
+		record.setAdmin(notify.getAdmin());
+		record.setTime(dateFormat.parse(notify.getTime()));
+		record.setMaterials(jsonCreater.writeValueAsString(notify.getMaterials()));
+		mapper.insert(record);
+		sqlSession.commit();
+		
+		System.out.println("savePickRequest:");
+		
 	}
 	
 }

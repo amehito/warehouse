@@ -1,25 +1,32 @@
-const ms = 1000;
+const ms = 5000;
+
 window.onload = function(){
 	//setInterval(receive,ms);
 	setInterval(receive,ms);
 }
+
+function showRequestDetails(text){
+//	console.log({text,"122"});
+	console.log(123);
+}
 function showNotification(text){
 	
-	document.getElementById('notifyPanel').innerHTML = `
-		<div class="panel panel-default">
+	document.getElementById('notifyPanel').innerHTML += `
+		<div class="panel panel-default" >
 			<div class="panel-body">
-				${text}
+				有一条来自${text.admin}的取料请求，点击我查看
+				
   			</div>
 		</div>
 		`;
 	
-	console.log('提示');
+	console.log(text);
 //	document.body.appendChild(notifyDiv);
 
 }
 let receive = function(){
 	$.ajax({
-		url:'Material/notify',
+		url:'Material/showNotification',
 		data:'notice',
 		type:'POST',
 		success:function(data){

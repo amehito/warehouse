@@ -9,10 +9,7 @@ public class notifyModel {
 	private String admin;
 	private String Time;
 	private List<Material> Materials;
-	
-	
-		
-		
+
 	
 	public String getAdmin() {
 		return admin;

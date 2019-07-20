@@ -1,6 +1,7 @@
 package com.xinyi.controller;
 
 import java.awt.List;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.protocol.x.Notice;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.service.MaterialDataService;
@@ -30,10 +34,23 @@ public class DataController {
 	notifyModel notify;
 	final static int  materialInfoNumber = 4;
 	ArrayList<notifyModel> list = new ArrayList<notifyModel>();
+	public static ObjectMapper jsonCreater = new ObjectMapper();
+
+	@RequestMapping(value="/showNotification",produces="application/json;charset=utf-8")
+	public @ResponseBody String show() throws JsonProcessingException {
+//		 =  jsonCreater.writeValueAsString(list);
+		if(list.isEmpty()) {
+			return "no message";
+		}
+		String result = jsonCreater.writeValueAsString(list.remove(0));
+		System.out.println(list.size());
+		return result;
+	}
+	
 	@RequestMapping(value="/notify",produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String Notice(@RequestParam(value="materials[0][materialId]",required = false) String info,
-            HttpServletRequest request) {
+            HttpServletRequest request) throws JsonProcessingException, ParseException {
 		if(info == null)
 			return "notice";
 		System.out.println(info);
@@ -50,8 +67,8 @@ public class DataController {
         notify = new notifyModel();
         notify.setAdmin(params.get("user")[0]);
         notify.setTime(params.get("Time")[0]);
-        System.out.println(notify.getAdmin());
-        System.out.println(notify.getTime());
+ //       System.out.println(notify.getAdmin());
+//        System.out.println(notify.getTime());
         
 //        params.remove("user");
 //        params.remove("Time");
@@ -59,15 +76,17 @@ public class DataController {
         ArrayList<Material> materialList = new ArrayList<Material>();
         for(int i=0;i<params.size()/materialInfoNumber;i++) {
         	Material material = new Material();
-        	material.setMaterialId(params.get("materials["+i+1+"][materialId]")[0]);
-        	material.setMaterial(params.get("materials["+i+1+"][material]")[0]);
-        	material.setNumber(Integer.parseInt(params.get("materials["+i+1+"][number]")[0]));
-        	material.setUnit(params.get("materials["+i+1+"][unit]")[0]);
+        	material.setMaterialId(params.get("materials["+i+"][materialId]")[0]);
+        	material.setMaterial(params.get("materials["+i+"][material]")[0]);
+        	material.setNumber(Integer.parseInt(params.get("materials["+i+"][number]")[0]));
+        	material.setUnit(params.get("materials["+i+"][unit]")[0]);
         	materialList.add(material);
         }
         notify.setMaterials(materialList);
+        MaterialDataService.savePickRequest(notify);
         list.add(notify);
         System.out.println(list.get(0).getMaterials().get(1).getMaterial());
+        System.out.println("list.size: "+list.size());
 		return "success";
 		
 	}

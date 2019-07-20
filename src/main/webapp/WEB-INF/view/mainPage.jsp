@@ -309,7 +309,7 @@ pageEncoding="UTF-8"%>
     </div>
 </div>
 
-<div id="notifyPanel">hello</div>
+<div id="notifyPanel"></div>
 <span id="requestPrefix" class="hide">${sessionScope.requestPrefix}</span>
 
 <script type="text/javascript"
