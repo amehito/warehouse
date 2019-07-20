@@ -6,7 +6,7 @@
     <javaModelGenerator targetPackage="com.xinyi.bean" targetProject="xinyi" />
     <sqlMapGenerator targetPackage="com.xinyi.mapper" targetProject="xinyi" />
     <javaClientGenerator targetPackage="com.xinyi.dao" targetProject="xinyi" type="XMLMAPPER" />
-    <table schema="xinyi" tableName="picking"  enableCountByExample="true" enableUpdateByExample="true"
+    <table schema="xinyi" tableName="xinyi_picking"  enableCountByExample="true" enableUpdateByExample="true"
                enableDeleteByExample="true" enableSelectByExample="true">
      
     </table>

@@ -11,7 +11,14 @@ a:link{
 	position: relative;
 	overflow: hidden;
 }
-
+#myModal td{
+			width:160px;
+			height:30px;
+			font-size:20px;
+	}
+#myModal table{
+	width:80%;
+}
 .btn-file input[type=file]{
 	position: absolute;
 	top: 0;

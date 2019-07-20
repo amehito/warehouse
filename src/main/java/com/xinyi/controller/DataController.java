@@ -1,7 +1,7 @@
 package com.xinyi.controller;
 
-import java.awt.List;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -9,22 +9,17 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Test;
+import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.protocol.x.Notice;
 import com.xinyi.bean.XinyiMaterial;
+import com.xinyi.bean.XinyiPicking;
 import com.xinyi.service.MaterialDataService;
-import com.xinyi.test.ChangeMaterialInfo;
 import com.xinyi.test.Material;
 import com.xinyi.test.notifyModel;
 
@@ -33,16 +28,43 @@ import com.xinyi.test.notifyModel;
 public class DataController {
 	notifyModel notify;
 	final static int  materialInfoNumber = 4;
+	boolean needQuery = false;
+	static boolean firstLogin = true;
+	static final String NO_MESSAGE = "no message";
 	ArrayList<notifyModel> list = new ArrayList<notifyModel>();
 	public static ObjectMapper jsonCreater = new ObjectMapper();
+	ArrayList<XinyiPicking> uncompleteList;
+	
+	@RequestMapping(value="/notificationInit",produces="application/json;charset=utf-8")
+	public @ResponseBody String notificationInit() throws JsonProcessingException {
+		uncompleteList = MaterialDataService.getUncompletes();
+		System.out.println(uncompleteList.size());
+		if(uncompleteList ==null) {
+			return NO_MESSAGE;
+		}
+		ArrayList<XinyiPicking> theList =  (ArrayList<XinyiPicking>) uncompleteList.clone();
+		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh-mm-ss"));
+		String result = jsonCreater.writeValueAsString(theList);
+		return result;
+	}
 
 	@RequestMapping(value="/showNotification",produces="application/json;charset=utf-8")
 	public @ResponseBody String show() throws JsonProcessingException {
 //		 =  jsonCreater.writeValueAsString(list);
-		if(list.isEmpty()) {
-			return "no message";
+		//第一次登陆也查询所有
+//		if(firstLogin) {
+//			changeNotifyState();
+//			firstLogin = false;
+//		}
+		if(!needQuery) {
+			return NO_MESSAGE;
 		}
-		String result = jsonCreater.writeValueAsString(list.remove(0));
+		//每一个连接都有一个独立的list
+		ArrayList<XinyiPicking> theList =  (ArrayList<XinyiPicking>) uncompleteList.clone();
+		String result = jsonCreater.writeValueAsString(theList);
+		
+		needQuery = false;
+		
 		System.out.println(list.size());
 		return result;
 	}
@@ -85,12 +107,19 @@ public class DataController {
         notify.setMaterials(materialList);
         MaterialDataService.savePickRequest(notify);
         list.add(notify);
-        System.out.println(list.get(0).getMaterials().get(1).getMaterial());
-        System.out.println("list.size: "+list.size());
+        changeNotifyState();
 		return "success";
 		
 	}
 	
+	private void changeNotifyState() {
+		// TODO Auto-generated method stub
+		needQuery = true;
+		//得到数据库中未完成的元组，其中plus存放是否完成
+		uncompleteList = MaterialDataService.getUncompletes();
+		
+	}
+
 	@RequestMapping(value="/getMaterialInfo",produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String getMaterialInfo() throws JsonProcessingException {

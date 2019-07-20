@@ -11,11 +11,13 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xinyi.bean.Picking;
+import com.xinyi.bean.XinyiPicking;
+import com.xinyi.bean.XinyiPickingExample;
+import com.xinyi.bean.XinyiActionExample.Criteria;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiModifyhistory;
 import com.xinyi.bean.XinyiUser;
-import com.xinyi.dao.PickingMapper;
+import com.xinyi.dao.XinyiPickingMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiModifyhistoryMapper;
 import com.xinyi.dao.XinyiUserMapper;
@@ -98,16 +100,36 @@ public class MaterialDataService {
 	}
 	public static void savePickRequest(notifyModel notify) throws ParseException, JsonProcessingException {
 		// TODO Auto-generated method stub
-		PickingMapper mapper = sqlSession.getMapper(PickingMapper.class);
-		Picking record = new Picking();
-		record.setAdmin(notify.getAdmin());
-		record.setTime(dateFormat.parse(notify.getTime()));
-		record.setMaterials(jsonCreater.writeValueAsString(notify.getMaterials()));
-		mapper.insert(record);
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		XinyiPicking record = new XinyiPicking();
+		System.out.println("admin:"+notify.getAdmin());
+		record.setName(notify.getAdmin());
+		record.setTime(new Date());
+		System.out.println(notify.getTime()+"传入时间："+dateFormat.parse(notify.getTime()));
+		String maString = jsonCreater.writeValueAsString(notify.getMaterials());
+		record.setMaterials(maString);
+		record.setPlus("未通过");
+	//	record.setMaterials("测试");
+		System.out.println("material:"+maString);
+
+		mapper.insertSelective(record);
 		sqlSession.commit();
 		
 		System.out.println("savePickRequest:");
 		
+	}
+	public static ArrayList<XinyiPicking> getUncompletes() {
+		// TODO Auto-generated method stub
+		
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		
+		XinyiPickingExample example = new XinyiPickingExample();
+		com.xinyi.bean.XinyiPickingExample.Criteria criteria = example.createCriteria();
+		criteria.andPlusEqualTo("未通过");
+		sqlSession.clearCache();
+		
+		ArrayList<XinyiPicking> list =(ArrayList<XinyiPicking>) mapper.selectByExample(example );
+		return list;
 	}
 	
 }

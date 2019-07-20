@@ -19,10 +19,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xinyi.bean.XinyiMaterial;
+import com.xinyi.bean.XinyiPicking;
+import com.xinyi.bean.XinyiPickingExample;
 import com.xinyi.bean.XinyiUser;
 import com.xinyi.bean.XinyiUserExample;
 import com.xinyi.bean.XinyiUserExample.Criteria;
 import com.xinyi.dao.XinyiMaterialMapper;
+import com.xinyi.dao.XinyiPickingMapper;
 import com.xinyi.dao.XinyiUserMapper;
 import com.xinyi.utils.MybatisOfSpringUtil;
 
@@ -71,14 +74,19 @@ public class MapperTest {
 	}
 	
 	@Test
-	public void tt() throws InterruptedException {
-		XinyiUserMapper xinyiUserMapper;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		TimeZone zone = TimeZone.getDefault();
-		format.setTimeZone(zone);
-		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
-		XinyiMaterialMapper Mapper = sqlSession.getMapper(XinyiMaterialMapper.class);
-		System.out.println(Mapper.selectAll().size());
+	public void tt() throws InterruptedException {		
+		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();		
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);		
+//		XinyiPickingExample example = new XinyiPickingExample();
+//		com.xinyi.bean.XinyiPickingExample.Criteria criteria = example.createCriteria();
+//		criteria.andIdEqualTo(8);
+		
+		XinyiPicking record = new XinyiPicking();
+		record.setId(8);
+		record.setPlus("通过");
+		mapper.updateByPrimaryKeySelective(record );
+		
+		sqlSession.commit();
 	}
 	
 	

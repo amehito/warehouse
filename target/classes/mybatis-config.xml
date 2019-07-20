@@ -2,6 +2,10 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+<settings>
+	<setting name="logImpl" value="STDOUT_LOGGING"/>
+	
+</settings>
 <typeAliases>
 
 </typeAliases>
@@ -24,7 +28,9 @@
 <mapper resource="com/xinyi/mapper/XinyiMaterialMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiModifyhistoryMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiManufacturesMapper.xml" />
-<mapper resource="com/xinyi/mapper/PickingMapper.xml" />
+<mapper resource="com/xinyi/mapper/XinyiPickingMapper.xml" />
 
 </mappers>
+
+
 </configuration>
