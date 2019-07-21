@@ -317,7 +317,7 @@ pageEncoding="UTF-8"%>
         <h4 class="modal-title" id="myModalLabel">Modal title</h4>
       </div>
       <div class="modal-body">
-        <table  border=1; cellpadding=12; cellspacing=0; align=center>
+        <table  border=1; cellpadding=12; cellspacing=0; align=center id="modalTable">
 				<tr align=center>
 					<td colspan="4">领料单</td>
 				</tr>
@@ -353,8 +353,7 @@ pageEncoding="UTF-8"%>
 			</table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary" id="identifyExport">确认出库</button>
       </div>
     </div>
   </div>

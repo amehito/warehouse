@@ -132,4 +132,9 @@ public class MaterialDataService {
 		return list;
 	}
 	
+	public static void passRequest(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

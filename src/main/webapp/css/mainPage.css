@@ -17,7 +17,12 @@ a:link{
 			font-size:20px;
 	}
 #myModal table{
-	width:80%;
+	width:80%;	
+
+}
+#modalTable{
+	width:100%;
+	height :300px;
 }
 .btn-file input[type=file]{
 	position: absolute;

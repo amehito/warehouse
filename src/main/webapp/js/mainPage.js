@@ -49,3 +49,16 @@ function signOut() {
 		})
 	})
 }
+
+let passRequest = document.querySelector('#identifyExport');
+	passRequest.addEventListener('click',function(){
+		let formdata = new FormData();
+		formdata.append("id",1);
+		fetch('Material/passRequest',{
+			method:'POST',
+			body:formdata
+		})
+		.then(data => console.log(data))
+		
+		.catch(error => console.log(error));
+});

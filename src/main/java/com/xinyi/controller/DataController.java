@@ -8,9 +8,10 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.context.support.StaticApplicationContext;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
+import org.junit.runners.Parameterized.Parameter;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,6 +47,16 @@ public class DataController {
 		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh-mm-ss"));
 		String result = jsonCreater.writeValueAsString(theList);
 		return result;
+	}
+	
+	@RequestMapping(value="/passRequest")
+	public @ResponseBody String passRequest(HttpServletRequest request) {
+		System.out.println(request.getParameterMap().toString());
+		String id = request.getParameter("id");
+		System.out.println("id :"+id);
+		MaterialDataService.passRequest(Integer.parseInt(id));
+		changeNotifyState();
+		return "PassSuccess";
 	}
 
 	@RequestMapping(value="/showNotification",produces="application/json;charset=utf-8")
