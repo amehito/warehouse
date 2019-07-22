@@ -1,8 +1,9 @@
 const ms = 5000;
 let info  ;
-
+let globalId;
 var a={"admin":"admin","time":"2019-07-19","materials":[{"material":"DN20铝塑对节","materialId":"21270302001","number":1,"unit":"只"},{"material":"2-4kw立式电动机","materialId":"16060115002","number":1,"unit":"台"},{"material":"2路继电器座","materialId":"11020102001","number":1,"unit":"只"},{"material":"剪刀","materialId":"10000000001","number":1,"unit":"个"},{"material":"4-7.5kw立式电机","materialId":"16060117001","number":12,"unit":"台"}]};
 function seeInformation(id){
+	globalId = id;
 	a = info.filter((item) =>  (item.id === id));
 	console.log({a});
 	

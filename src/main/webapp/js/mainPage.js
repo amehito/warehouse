@@ -52,13 +52,18 @@ function signOut() {
 
 let passRequest = document.querySelector('#identifyExport');
 	passRequest.addEventListener('click',function(){
-		let formdata = new FormData();
-		formdata.append("id",1);
-		fetch('Material/passRequest',{
-			method:'POST',
-			body:formdata
-		})
-		.then(data => console.log(data))
+		let data ={"id":2};
 		
-		.catch(error => console.log(error));
+		
+		
+		fetch('Material/passRequest',{
+			headers:new Headers({
+	           "Content-Type":"application/json",
+			}),
+			method:'POST',
+			body:globalId
+		})
+		.then(response => response.text())
+		.then(data=>{alert(data)});
+		
 });

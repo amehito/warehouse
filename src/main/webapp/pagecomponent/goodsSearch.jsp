@@ -4,6 +4,13 @@
     
  <script>
     // 鏌ヨ鍙傛暟
+	//document.querySelector('#search_button').addEventListener('keydown',function(key){console.log(key)});
+	document.querySelector('#user_id').addEventListener('keydown',function(key){
+		if(key.keyCode ===13){
+			document.querySelector('#search_button').click();
+		}
+	});
+
     search_user_id = null
     search_start_date = null
     search_end_date = null
@@ -175,12 +182,11 @@
     <div class="panel-body">
         <div class="row">
            <div class="col-md-3" >
-                <form action="" class="form-inline">
+                
                     <div class="form-group">
-                        <label class="form-label">关键字</label>
                         <input type="text" id="user_id" class="form-control" placeholder="用户ID" style="width:50%">
                     </div>
-                </form>
+                
             </div>
             
        <!--      <div class="col-md-7">

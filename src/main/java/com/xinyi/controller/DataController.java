@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xinyi.bean.XinyiMaterial;
@@ -48,15 +49,28 @@ public class DataController {
 		String result = jsonCreater.writeValueAsString(theList);
 		return result;
 	}
-	
-	@RequestMapping(value="/passRequest")
-	public @ResponseBody String passRequest(HttpServletRequest request) {
-		System.out.println(request.getParameterMap().toString());
-		String id = request.getParameter("id");
-		System.out.println("id :"+id);
-		MaterialDataService.passRequest(Integer.parseInt(id));
+	public class jsonid{
+		private String id ;
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		} 
+		
+	}
+	@RequestMapping(value="/passRequest",produces="application/json;charset=utf-8")
+	public @ResponseBody String passRequest(HttpServletRequest request,@RequestBody  String id)  {
+		System.out.println(request.getParameterMap().entrySet().size());
+		System.out.println("id"+id);
+		
+		if(!MaterialDataService.passRequest(Integer.parseInt(id))) {
+			return"PassFailure";
+		}
 		changeNotifyState();
-		return "PassSuccess";
+		return "出库成功";
 	}
 
 	@RequestMapping(value="/showNotification",produces="application/json;charset=utf-8")

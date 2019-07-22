@@ -2,10 +2,12 @@ package com.xinyi.test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
+import java.awt.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.logging.SimpleFormatter;
 
@@ -18,6 +20,7 @@ import org.omg.IOP.CodecPackage.FormatMismatch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiPicking;
 import com.xinyi.bean.XinyiPickingExample;
@@ -28,6 +31,9 @@ import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiPickingMapper;
 import com.xinyi.dao.XinyiUserMapper;
 import com.xinyi.utils.MybatisOfSpringUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class MapperTest {
 	@Resource
@@ -74,6 +80,25 @@ public class MapperTest {
 	}
 	
 	@Test
+	public void t() throws JsonProcessingException {
+		ObjectMapper jsonCreater = new ObjectMapper();
+		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();		
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+	
+		XinyiPicking record = new XinyiPicking();
+		record.setId(10);
+		XinyiMaterialMapper materialMapper = sqlSession.getMapper(XinyiMaterialMapper.class);
+		String data = mapper.selectByPrimaryKey(10).getMaterials();
+		com.alibaba.fastjson.JSONArray array = com.alibaba.fastjson.JSONArray.parseArray(data);
+		com.alibaba.fastjson.JSONObject object = array.getJSONObject(0);
+	//	JSONArray jsonArray = JSONArray.fromObject(data);
+	//	JSONObject object = (JSONObject) jsonArray.get(0);
+//		System.out.println(object.get("number"));
+		int i = (int) object.get("number");
+		sqlSession.commit();
+		
+	 
+	}
 	public void tt() throws InterruptedException {		
 		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();		
 		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);		

@@ -1,29 +1,28 @@
 package com.xinyi.service;
 
-import java.awt.List;
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.ibatis.session.SqlSession;
-import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xinyi.bean.XinyiPicking;
-import com.xinyi.bean.XinyiPickingExample;
-import com.xinyi.bean.XinyiActionExample.Criteria;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiModifyhistory;
-import com.xinyi.bean.XinyiUser;
-import com.xinyi.dao.XinyiPickingMapper;
+import com.xinyi.bean.XinyiPicking;
+import com.xinyi.bean.XinyiPickingExample;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiModifyhistoryMapper;
-import com.xinyi.dao.XinyiUserMapper;
-import com.xinyi.test.ChangeMaterialInfo;
+import com.xinyi.dao.XinyiPickingMapper;
 import com.xinyi.test.notifyModel;
 import com.xinyi.utils.MybatisOfSpringUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 
 
@@ -132,8 +131,37 @@ public class MaterialDataService {
 		return list;
 	}
 	
-	public static void passRequest(int id) {
+	public static boolean passRequest(int id) {
 		// TODO Auto-generated method stub
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		try {
+			XinyiPicking record = new XinyiPicking();
+			record.setId(id);
+			record.setPlus("通过");
+			//修改材料表中的数量
+			XinyiMaterialMapper materialMapper = sqlSession.getMapper(XinyiMaterialMapper.class);
+			XinyiMaterial material;
+			String data = mapper.selectByPrimaryKey(id).getMaterials();
+			com.alibaba.fastjson.JSONArray jsonArray = com.alibaba.fastjson.JSONArray.parseArray(data);
+			for(int i=0;i<jsonArray.size();i++) {
+				com.alibaba.fastjson.JSONObject object = jsonArray.getJSONObject(i);
+			    String materialId =	(String) object.get("materialId");
+			   
+			    int num = object.getIntValue("number");
+			    material = materialMapper.selectByPrimaryKey(materialId);
+			    int stockNum = material.getStockNumber();
+			    material.setStockNumber(stockNum - num);
+			    materialMapper.updateByPrimaryKey(material);
+			}
+			mapper.updateByPrimaryKeySelective(record);
+			sqlSession.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return false;
+		}
+		
+		return true;
 		
 	}
 	
