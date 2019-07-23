@@ -28,7 +28,7 @@ import net.sf.json.JSONObject;
 public class MaterialDataService {
 	public static ObjectMapper jsonCreater = new ObjectMapper();
 	static SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
-	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	public static String getMaterialInfo() throws JsonProcessingException {
 		
 		
@@ -103,7 +103,7 @@ public class MaterialDataService {
 		System.out.println("admin:"+notify.getAdmin());
 		record.setName(notify.getAdmin());
 		record.setTime(new Date());
-		System.out.println(notify.getTime()+"传入时间："+dateFormat.parse(notify.getTime()));
+		System.out.println(notify.getTime()+"传入时间："+notify.getTime());
 		String maString = jsonCreater.writeValueAsString(notify.getMaterials());
 		record.setMaterials(maString);
 		record.setPlus("未通过");
@@ -130,13 +130,13 @@ public class MaterialDataService {
 		return list;
 	}
 	
-	public static boolean passRequest(int id) {
+	public static boolean passRequest(int id,String admin) {
 		// TODO Auto-generated method stub
 		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
 		try {
 			XinyiPicking record = new XinyiPicking();
 			record.setId(id);
-			record.setPlus("通过");
+			record.setPlus(admin+"通过");
 			//修改材料表中的数量
 			XinyiMaterialMapper materialMapper = sqlSession.getMapper(XinyiMaterialMapper.class);
 			XinyiMaterial material;
@@ -166,6 +166,7 @@ public class MaterialDataService {
 	public static String getAllRequestInfo() throws JsonProcessingException {
 		// TODO Auto-generated method stub
 		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH-mm-ss"));
 		String result = jsonCreater.writeValueAsString(mapper.selectAll());
 
 		return result;

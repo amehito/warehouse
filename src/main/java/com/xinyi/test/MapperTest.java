@@ -16,6 +16,8 @@ import javax.annotation.Resource;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.omg.IOP.CodecPackage.FormatMismatch;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationConfig;
@@ -37,7 +39,7 @@ import net.sf.json.JSONObject;
 
 public class MapperTest {
 	@Resource
-	
+
 	
 	public static void main(String[] args) {
 		XinyiUserMapper xinyiUserMapper;
@@ -78,8 +80,8 @@ public class MapperTest {
 //		sqlSession.select(arg0, arg1);
 		
 	}
+
 	
-	@Test
 	public void t() throws JsonProcessingException {
 		ObjectMapper jsonCreater = new ObjectMapper();
 		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();		
@@ -99,6 +101,8 @@ public class MapperTest {
 		
 	 
 	}
+	//新益picking测试
+	@Test
 	public void tt() throws InterruptedException {		
 		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();		
 		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);		
@@ -106,11 +110,17 @@ public class MapperTest {
 //		com.xinyi.bean.XinyiPickingExample.Criteria criteria = example.createCriteria();
 //		criteria.andIdEqualTo(8);
 		
-		XinyiPicking record = new XinyiPicking();
-		record.setId(8);
-		record.setPlus("通过");
-		mapper.updateByPrimaryKeySelective(record );
-		
+//		XinyiPicking record = new XinyiPicking();
+//		record.setPlus("测试");
+//		record.setMaterials("测试");
+//		record.setName("ye");
+//		SimpleDateFormat frDateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+//		Date now = new Date();
+//		System.out.println(now);
+//		record.setTime(new Date());
+//		mapper.insertSelective(record);
+		XinyiPickingMapper pickMapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		System.out.println(pickMapper.selectAll().get(3).getTime());
 		sqlSession.commit();
 	}
 	

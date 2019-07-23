@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.junit.runners.Parameterized.Parameter;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,8 @@ public class DataController {
 	ArrayList<notifyModel> list = new ArrayList<notifyModel>();
 	public static ObjectMapper jsonCreater = new ObjectMapper();
 	ArrayList<XinyiPicking> uncompleteList;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+
 	
 	@RequestMapping(value="/notificationInit",produces="application/json;charset=utf-8")
 	public @ResponseBody String notificationInit() throws JsonProcessingException {
@@ -62,11 +66,11 @@ public class DataController {
 		
 	}
 	@RequestMapping(value="/passRequest",produces="application/json;charset=utf-8")
-	public @ResponseBody String passRequest(HttpServletRequest request,@RequestBody  String id)  {
+	public @ResponseBody String passRequest(HttpServletRequest request,@RequestBody  String id,HttpSession session)  {
 		System.out.println(request.getParameterMap().entrySet().size());
 		System.out.println("id"+id);
-		
-		if(!MaterialDataService.passRequest(Integer.parseInt(id))) {
+		String admin = (String) session.getAttribute("UserName");
+		if(!MaterialDataService.passRequest(Integer.parseInt(id),admin)) {
 			return"PassFailure";
 		}
 		changeNotifyState();
@@ -118,9 +122,10 @@ public class DataController {
             System.out.println("key:"+entry.getKey()+" value:"+ Arrays.asList(entry.getValue()));
             
         }
+        
         notify = new notifyModel();
         notify.setAdmin(params.get("user")[0]);
-        notify.setTime(params.get("Time")[0]);
+        notify.setTime(format.parse(params.get("Time")[0]));
  //       System.out.println(notify.getAdmin());
 //        System.out.println(notify.getTime());
         
