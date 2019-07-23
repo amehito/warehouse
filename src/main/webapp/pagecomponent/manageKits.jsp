@@ -6,63 +6,15 @@
 	var search_keyWord = "";
 	var select_goodsID;
 	var select_repositoryID;
-	var material_data ;
+
 	$(function() {
-		tableDataInit();
 		optionAction();
 		searchAction();
 		storageListInit();
 		importStroageAction();
-		exportStorageAction();
-		calculateWithoutTaxPrice();
+		exportStorageAction()
 		
 	})
-	function calculateWithoutTaxPrice() {
-		
-		
-		$(".calcuBtn").click(function(){
-			let priceWithTax = $("#materialPrice").val();
-			var taxRate = this.value/100+1;
-			let priceWithoutTax = priceWithTax/taxRate;
-			console.log({taxRate,priceWithTax});
-			$("#priceWithoutTax").text(priceWithoutTax);
-		});
-		/* $("#taxInput").focus(function(){
-			$("#priceWithoutTax").text(0);
-			let priceWithTax = $("#materialPrice").val();
-			console.log(this);
-			var taxRate = this.value/100+1;
-			let priceWithoutTax = priceWithTax/taxRate;
-			console.log({taxRate,priceWithTax});
-			$("#priceWithoutTax").text(priceWithoutTax);
-		}); */
-
-		$('#taxInput').on('input propertychange click', function(){
-			let priceWithTax = $("#materialPrice").val();
-			let taxRate = $("#taxInput").val()/100+1;
-			
-			let priceWithoutTax = priceWithTax/taxRate;
-			
-			$("#priceWithoutTax").text(priceWithoutTax);
-		  //获取input 元素,并实时监听用户输入
-		  //逻辑
-		});
-		$("#materialPrice").on('input propertychange click', function(){
-			$("#priceWithoutTax").text("请点击税率");
-		});
-	}
-	function tableDataInit() {
-		$.ajax({
-			url:"Material/getmodifyhistory",
-			type:"GET",
-			dataType:"JSON",
-			success:function(data){
-				material_data = data;
-				console.log({material_data});
-			}
-		})
-	}
-	
 	function changeNumber(){
 		
 		var num = $('#change_storage_number').val();
@@ -148,7 +100,7 @@
 			createTime:date
 		};
 		$.ajax({
-			url:"Material/changematerialnumber",
+			url:"Material/addmaterial",
 			data:data,
 			type:"POST",
 			dataType:"text",
@@ -235,19 +187,9 @@
 
 	// 表格刷新
 	function tableRefresh() {
-		let keyWords = $("#search_input_type").val();
-		console.log({keyWords});
-		let filtedDate = [];
-		filtedDate = material_data.filter(function(key){
-			return key.materialid ===keyWords || key.materialname ===keyWords || key.modifymanager === keyWords
+		$('#storageList').bootstrapTable('refresh', {
+			query : {}
 		});
-		
-		filtedDate = JSON.stringify(filtedDate);
-		filtedDate = eval(filtedDate);
-		console.log({filtedDate});
-		$("#search_input_type").val(" ");
-	//	$("#search_input_type").attr("placeholder",keyWords);
-		$('#storageList').bootstrapTable('load',filtedDate);
 	}
 
 	// 行编辑操作
@@ -450,25 +392,11 @@
                     <div class="form-group">
                     	<label for="materialUnit" class="control-label">单位</label>
                     	<input type="text" class="form-control" id="materialUnit" >
-                    	<div class="row" id="taxBtn">
-                    		<label for="materialPrice" class="control-label ">单价</label>
-                    		<input type="text" class="form-control" id="materialPrice" class="col-md-4" >
-                    		<button class="col-md-2 btn btn-default calcuBtn" value="9">%9</button>
-                    		<button class="col-md-2 btn btn-default calcuBtn" value="13">%13</button>
-               				<button class="col-md-2 btn btn-default calcuBtn" value="17">%17</button>
-                    		<div class="input-group input-group-sm">
-						   	  <span class="input-group-addon" id="">输入自定义数字</span>
-							  <input type="text" class="form-control" id="taxInput" >
-							</div>
-                    		
-               			</div>
-               			
+                    	<label for="materialPrice" class="control-label">单价</label>
+                    	<input type="text" class="form-control" id="materialPrice" >
                     </div>
-                    <div class="form-group">
-	                   <span id="priceWithoutTax" class="label label-default">请输入价格</span>
                     
-                    
-                    </div>
+                   
                     
                     <div class="form-group">
                     	<label for="stockNumber" class="control-label">剩余数量</label>
