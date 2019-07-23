@@ -2,6 +2,7 @@
 <!--pageEncoding="UTF-8"%>-->
 
 <script>
+	let requestData = [{"id":2,"name":"admin","materials":"测试","plus":null,"time":"2019-07-20"},{"id":5,"name":"admin","materials":"[{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":null,"time":"2019-07-20"},{"id":6,"name":"admin","materials":"[{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"通过","time":"2019-07-20"},{"id":7,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"通过","time":"2019-07-20"},{"id":8,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"通过","time":"2019-07-20"},{"id":9,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"通过","time":"2019-07-20"},{"id":10,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"通过","time":"2019-07-20"},{"id":11,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"通过","time":"2019-07-20"},{"id":12,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"通过","time":"2019-07-20"},{"id":13,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"未通过","time":"2019-07-20"},{"id":14,"name":"admin","materials":"[{\"material\":\"1P-6A断路器\",\"materialId\":\"11010101004\",\"number\":12,\"unit\":\"只\"},{\"material\":\"2P-6A断路器\",\"materialId\":\"11010102003\",\"number\":12,\"unit\":\"只\"},{\"material\":\"2P-20A断路器\",\"materialId\":\"11010102006\",\"number\":11,\"unit\":\"只\"},{\"material\":\"1P-1A断路器\",\"materialId\":\"﻿11010101001\",\"number\":1,\"unit\":\"只\"}]","plus":"未通过","time":"2019-07-20"},{"id":15,"name":"admin","materials":"[{\"material\":\"螺丝刀\",\"materialId\":\"111111111111\",\"number\":1,\"unit\":\"个\"}]","plus":"通过","time":"2019-07-22"}];
     // 查询参数
     search_user_id = null
     search_start_date = null
@@ -36,22 +37,19 @@
 	            field : 'id',
 	            title : '记录ID'
 	        },{
-	            field : 'userID',
-	            title : '用户ID'
+	            field : 'name',
+	            title : '名字'
 	        },{
-	            field : 'userName',
-	            title : '用户名'
+	            field : 'materials',
+	            title : '材料'
 	        },{
-	            field : 'operationName',
-	            title : '操作'
-	        },{
-	            field : 'operationTime',
+	            field : 'time',
 	            title : '时间'
 	        },{
-	            field : 'operationResult',
-	            title : '操作结果'
+	            field : 'plus',
+	            title : '状态/管理员'
 	        }],
-	        url : 'systemLog/getUserOperationRecords',
+	        data:requestData,
 	        method : 'GET',
 	        queryParams : queryParams,
             sidePagination : "server",
@@ -66,9 +64,7 @@
 
 	// 表格刷新
 	function tableRefresh() {
-		$('#userOperationRecordTable').bootstrapTable('refresh', {
-			query : {}
-		});
+		$('#userOperationRecordTable').bootstrapTable('load', requestData);
 	}
 
 	// 分页查询参数

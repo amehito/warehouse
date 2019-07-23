@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import org.apache.ibatis.session.SqlSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -163,6 +162,13 @@ public class MaterialDataService {
 		
 		return true;
 		
+	}
+	public static String getAllRequestInfo() throws JsonProcessingException {
+		// TODO Auto-generated method stub
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		String result = jsonCreater.writeValueAsString(mapper.selectAll());
+
+		return result;
 	}
 	
 }

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 public interface XinyiManufacturesMapper {
-	
+	//这个表放厂家
 	//自己写的
 	@Select("select * from xinyi_manufactures")
 	public List<XinyiManufactures> selectAll();

@@ -72,7 +72,14 @@ public class DataController {
 		changeNotifyState();
 		return "出库成功";
 	}
-
+	
+	@RequestMapping(value="allRequestInfo",produces="application/json;charset=utf-8")
+	public @ResponseBody String allRequestInfo() throws JsonProcessingException{
+		String result = MaterialDataService.getAllRequestInfo();
+		System.out.println(new Date().toString()+"allRequestInfo");
+		return result;
+	}
+	
 	@RequestMapping(value="/showNotification",produces="application/json;charset=utf-8")
 	public @ResponseBody String show() throws JsonProcessingException {
 //		 =  jsonCreater.writeValueAsString(list);
