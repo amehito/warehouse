@@ -89,7 +89,9 @@
 		$('#userName').text(row.name);
 		$('#time').text(row.time);
 		let information = document.querySelector('#information');
+		information.innerHTML = "";
 		eval(row.materials).forEach(function(item){
+			
 			information.innerHTML+=`<tr aligin=center height='40px'>
 				<td>${item.material}</td>
 				<td>${item.materialId}}</td>
@@ -114,7 +116,9 @@
 			return response.json();
 		}).then(function(json){
 			console.log(search_id);
-			json=json.filter((item)=>item.id==search_id);
+			json=json.filter(function(item){
+				return item.id == search_id || item.name == search_id || item.plus == search_id;
+			})
 			$('#userOperationRecordTable').bootstrapTable('load', json);
 
 		});
@@ -151,21 +155,21 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-md-3">
-                <form action="" class="form-inline">
-                    <div class="form-group">
-                        <label class="form-label">用户ID：</label>
-                        <input type="text" id="user_id" class="form-control" placeholder="指定用户ID" style="width:50%">
+<!--                 <form action="" class="form-inline">
+ -->                    <div class="form-group">
+<!--                         <label class="form-label">用户ID：</label>
+ -->                        <input type="text" id="user_id" class="form-control" placeholder="输入ID/名字/管理员" style="width:50%">
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
-            <div class="col-md-7">
+          <!--   <div class="col-md-7">
                 <form action="" class="form-inline">
                     <label class="form-label">日期范围：</label>
                     <input class="form_date form-control" id="start_date" placeholder="起始日期">
                     <label class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;</label>
                     <input class="form_date form-control" id="end_date" placeholder="结束日期">
                 </form>
-            </div>
+            </div> -->
             <div class="col-md-2">
                 <button class="btn btn-success" id="search_button">
                     <span class="glyphicon glyphicon-search"></span> <span>查询</span>

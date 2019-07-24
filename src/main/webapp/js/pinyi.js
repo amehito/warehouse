@@ -128,3 +128,4 @@ var pinyin = (function (){
 function getCamelChars(material){
     return pinyin.getCamelChars(material).toLowerCase();
 }
+
