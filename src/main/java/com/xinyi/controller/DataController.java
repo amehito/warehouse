@@ -65,6 +65,19 @@ public class DataController {
 		} 
 		
 	}
+	
+	@RequestMapping(value="/declineRequest",produces="application/json;charset=utf-8")
+	public @ResponseBody String declineRequest(HttpServletRequest request,@RequestBody  String id,HttpSession session)  {
+		System.out.println(request.getParameterMap().entrySet().size());
+		System.out.println("id"+id);
+		String admin = (String) session.getAttribute("UserName");
+		if(!MaterialDataService.declineRequest(Integer.parseInt(id),admin)) {
+			return"PassFailure";
+		}
+		changeNotifyState();
+		return "拒绝成功";
+	}
+	
 	@RequestMapping(value="/passRequest",produces="application/json;charset=utf-8")
 	public @ResponseBody String passRequest(HttpServletRequest request,@RequestBody  String id,HttpSession session)  {
 		System.out.println(request.getParameterMap().entrySet().size());

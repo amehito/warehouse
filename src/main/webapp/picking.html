@@ -123,9 +123,10 @@
 				
 			</table>
 			
-			<button class="btnn" onclick="Submission()">
+			<button class="btnn" onclick="Submission()" id="btnn">
 				提交
 			</button>
+			
 		</div>
 		
 		</div>
@@ -252,13 +253,13 @@
 		 	var time=document.getElementById('date_info').value;
 		 	var infos = new Array();
 		 	var x=0;
+		 	var flag_num=true;
 		 	for(var i=1;i<=tab_num;i++){
 		 		if(!document.getElementById('name'+i)) continue;
 		 		var name=document.getElementById('name'+i).value;
 		 		var id=document.getElementById('id'+i).innerText;
 		 		var num=document.getElementById('num'+i).value;
 		 		var unit=document.getElementById('unit'+i).innerText;
-		 		
 		 		if(name!=null&&name!=""){
 		 			var infoItem = {
 		 				material:name,
@@ -266,6 +267,7 @@
 		 				number:num,
 		 				unit:unit
 		 			};
+		 			if(num=="") flag_num=false;
 		 			console.log(infoItem);
 					infos.splice(-1,0,infoItem);
 					x++;
@@ -273,22 +275,34 @@
 		 		}
 		 	}
 		 	console.log(JSON.stringify(infos));
+		 	if(infos.length==0 || userName==""){
+		 		alert("请确认是否还有未填写信息！");
+		 	}else if(!flag_num){
+		 		alert("请确认数量是否已经填写！");
+		 	}else{
+		 		$.ajax({
+					type: "POST",
+					url: "Material/notify",//提交的接口
+					data: {
+						/*传值*/
+						user:userName,
+						Time:time,
+						materials:eval(infos)
+					},
+					success:function(response){
+						console.log(response);
+						alert("提交成功");
+						location.replace(location);
+					},
+					error:function(error){
+						console.log({error});
+						alert("提交成功!!");
+						
+						//location.reload(); 
+					}
+				});
+		 	}
 		 	
-		 	$.ajax({
-				type: "POST",
-				url: "Material/notify",//提交的接口
-				data: {
-					/*传值*/
-					user:userName,
-					Time:time,
-					materials:eval(infos)
-				},
-				async: true,
-				success: function(data) {
-					//提交成功
-					alert('提交成功！');
-				}
-			})
 		 }
 	</script>
 </html>

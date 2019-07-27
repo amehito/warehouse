@@ -353,6 +353,7 @@ pageEncoding="UTF-8"%>
 			</table>
       </div>
       <div class="modal-footer">
+      	<button type="button" class="btn btn-danger" id="declineExport" data-dismiss="modal">拒绝</button>
         <button type="button" class="btn btn-primary" id="identifyExport" data-dismiss="modal">确认出库</button>
       </div>
     </div>

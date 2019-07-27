@@ -49,7 +49,17 @@ function signOut() {
 		})
 	})
 }
-
+document.querySelector('#declineExport').addEventListener('click',function(){
+	fetch('Material/declineRequest',{
+		headers:new Headers({
+           "Content-Type":"application/json",
+		}),
+		method:'POST',
+		body:globalId
+	})
+	.then(response => response.text())
+	.then(data=>{alert(data)});
+});
 let passRequest = document.querySelector('#identifyExport');
 	passRequest.addEventListener('click',function(){
 		let data ={"id":2};

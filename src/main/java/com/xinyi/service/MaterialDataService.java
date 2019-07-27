@@ -163,6 +163,23 @@ public class MaterialDataService {
 		return true;
 		
 	}
+	public static boolean declineRequest(int id, String admin) {
+		// TODO Auto-generated method stub
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		try {
+			XinyiPicking record = new XinyiPicking();
+			record.setId(id);
+			record.setPlus(admin+"拒绝");
+			mapper.updateByPrimaryKeySelective(record);
+			sqlSession.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			return false;
+		}
+		
+		return true;
+	}
 	public static String getAllRequestInfo() throws JsonProcessingException {
 		// TODO Auto-generated method stub
 		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
@@ -171,5 +188,6 @@ public class MaterialDataService {
 
 		return result;
 	}
+	
 	
 }
