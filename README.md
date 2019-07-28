@@ -14,11 +14,17 @@
 			"materialId":String,
 			"number":int,
 			"unit":String, //单位
-		},
+		},{
+			"material":String,
+			"materialId":String,
+			"number":int,
+			"unit":String, //单位
+		}
 			
 		],
 		
 		"CheckCode":String
+		}
 	}
 
 

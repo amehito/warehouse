@@ -48,7 +48,7 @@
 					
 					<tbody id='tbody'>
 						<tr>
-							<td><input type="" name="" oninput="searchForFill(this.value)"></td>
+							<td><input type="" name=""  id="auto" oninput="searchForFill(this.value)"></td>
 							<td><input type="" name=""></td>
 							<td><input type="" name=""></td>
 							<td><input type="" name=""></td>
@@ -78,7 +78,7 @@
 		<script>
 		const tableWidth = 18;
 			let fill = `<tr>
-		      <td><input type='text' oninput="searchForFill(this.value)"></td>
+		      <td><input type='text'  oninput="searchForFill(this.value)"></td>
 		      <td><input type='text'></td>
 		      <td><input type='text'></td>
 		      <td><input type='text'></td>
@@ -106,7 +106,10 @@
       method:'get',
     })
     .then(response => response.json())
-    .then(data=>{allMaterial = data});
+    .then(data=>{
+    	allMaterial = data
+    	
+    });
  		 
 		function submitData() {
 			let materialData = [];
@@ -143,6 +146,7 @@
 			$.ajax({
 				url:'Material/importMaterials',
 				type:'POST',
+				async:false,
 				data:JSON.stringify(materialData),
 				dataType:'json',
 				contentType:"application/json",
@@ -167,18 +171,57 @@
   	        inputs[item*tableWidth+8].addEventListener('input',fillMoneyInput);
   	        inputs[item*tableWidth+6].addEventListener('input',fillMoneyInput);
   	        inputs[item*tableWidth+5].addEventListener('input',fillMoneyInput); 
-
+	  	    
     	  
         //添加事件监听
  
       }
-      function searchForFill(id){
-    	  let result = allMaterial.filter(item => item.materialId.search(id)!== -1).slice(0,20);
-    	  
-        console.log(result);
-        console.log(id);
-      }
+	  
+    /* allMaterial.forEach(function(item){
+      arr.push(item.materialId);
+    }) */
+      
 
+      function searchForFill(id){
+    	  //给所有input框添加id
+    	  
+    	let arr = [];
+    	/* allMaterial.filter(item => return item.materialId.search(id)!== -1).forEach(item => {
+    		arr.push(item.materialId);
+    	});
+		console.log({arr}); */
+    	let result = allMaterial.filter(item => item.materialId.search(id)!== -1).slice(0,100);
+        arr = [];
+        arr.push(id);
+        result.forEach(item => {arr.push(item.materialId)});
+        console.log({arr})
+        let allArray = document.querySelectorAll('table input');
+    	let index = allArray.length-tableWidth;
+    	let inputItem = allArray[index];
+    	$(inputItem).autocomplete({
+      	  source:arr,
+    	  select:function(event,ui){
+    		  console.log(ui.item.label);
+    		  fillByMaterialId(index,ui.item.label,result);
+    		  return false;
+    	  }
+    	  });
+
+      }
+      function fillByMaterialId(row,materialId,result){
+    	  console.log({row,materialId,result});
+    	  let info = result.filter(item => item.materialId == materialId);
+    	  //填充info
+    	  console.log({info});
+    	  let inputArrays = document.querySelectorAll('table input');
+    	  inputArrays[row+1].value = info[0].viceId;
+    	  inputArrays[row+2].value = info[0].materialName;
+        inputArrays[row+3].value = info[0].materialSpec;
+        inputArrays[row+4].value = info[0].warehousePosition;
+        inputArrays[row+9].value = info[0].materialType;
+        inputArrays[row+13].value = info[0].materialUnit;
+        
+      }
       function fillMoneyInput(){
     	  let inputs = document.querySelectorAll('table input');
     	  for(let i=0;i<inputs.length/tableWidth;i++){ 
@@ -193,7 +236,15 @@
             inputs[i*tableWidth+12].value = number * priceIncludeTax;		
     	  }
       }
+
+      
+      
+    	
+      
 		</script>
+	
+ 
+
 	</body>
 
 </html>
