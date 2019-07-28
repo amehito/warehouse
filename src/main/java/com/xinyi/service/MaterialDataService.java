@@ -6,14 +6,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xinyi.bean.XinyiImport;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiModifyhistory;
 import com.xinyi.bean.XinyiPicking;
 import com.xinyi.bean.XinyiPickingExample;
+import com.xinyi.dao.XinyiImportMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiModifyhistoryMapper;
 import com.xinyi.dao.XinyiPickingMapper;
@@ -187,6 +191,15 @@ public class MaterialDataService {
 		String result = jsonCreater.writeValueAsString(mapper.selectAll());
 
 		return result;
+	}
+	public static void saveList(List<XinyiImport> info) {
+		// TODO Auto-generated method stub
+		XinyiImportMapper mapper = sqlSession.getMapper(XinyiImportMapper.class);
+		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH-mm-ss"));
+		for(XinyiImport item : info) {
+			mapper.insert(item);
+		}
+		sqlSession.commit();
 	}
 	
 	

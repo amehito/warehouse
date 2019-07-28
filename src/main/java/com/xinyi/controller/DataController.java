@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.junit.runners.Parameterized.Parameter;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xinyi.bean.XinyiImport;
+import com.xinyi.bean.XinyiImports;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiPicking;
 import com.xinyi.service.MaterialDataService;
@@ -40,6 +44,20 @@ public class DataController {
 	ArrayList<XinyiPicking> uncompleteList;
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
 
+    
+    @RequestMapping(value="/importMaterials",produces="application/json;charset=utf-8")
+	public @ResponseBody String importMateriasls(@RequestBody List<XinyiImport>info,HttpServletRequest request) throws JsonProcessingException {
+    	System.out.println(123);
+    	MaterialDataService.saveList(info);
+    	Map<String,String[]> params =  request.getParameterMap();
+         for(Map.Entry<String,String[]> entry:params.entrySet()){
+             System.out.println("key:"+entry.getKey()+" value:"+ Arrays.asList(entry.getValue()));
+             
+         }
+         
+    	String result = "";
+    	return result;
+    }
 	
 	@RequestMapping(value="/notificationInit",produces="application/json;charset=utf-8")
 	public @ResponseBody String notificationInit() throws JsonProcessingException {

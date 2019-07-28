@@ -96,7 +96,6 @@ public class MapperTest {
 	//	JSONArray jsonArray = JSONArray.fromObject(data);
 	//	JSONObject object = (JSONObject) jsonArray.get(0);
 //		System.out.println(object.get("number"));
-		int i = (int) object.get("number");
 		sqlSession.commit();
 		
 	 

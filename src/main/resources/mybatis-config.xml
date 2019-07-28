@@ -29,6 +29,7 @@
 <mapper resource="com/xinyi/mapper/XinyiModifyhistoryMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiManufacturesMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiPickingMapper.xml" />
+<mapper resource="com/xinyi/mapper/XinyiImportMapper.xml" />
 
 </mappers>
 

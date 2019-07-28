@@ -1,0 +1,242 @@
+<!--<%@ page language="java" contentType="text/html; charset=UTF-8"-->
+<!--pageEncoding="UTF-8"%>-->
+
+<script>
+    // 查询参数
+    
+    search_user_id = null
+    search_start_date = null
+    search_end_date = null
+	
+    
+    	
+	
+    $(function(){
+        datePickerInit();
+        userOperationRecordTableInit();
+        searchActionInit();
+    })
+
+    // 日期选择器初始化
+	function datePickerInit(){
+		$('.form_date').datetimepicker({
+			format:'yyyy-mm-dd',
+			language : 'zh-CN',
+			endDate : new Date(),
+			weekStart : 1,
+			todayBtn : 1,
+			autoClose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			forceParse : 0,
+			minView:2
+		});
+	}
+
+	// 表格初始化
+	function userOperationRecordTableInit(){
+		fetch('Material/allRequestInfo')
+		.then(function(response){
+			return response.json();
+		}).then(function(json){
+			json = json.reverse();
+			console.log(1);
+			console.log(json);
+			$('#userOperationRecordTable').bootstrapTable({
+		        columns:[{
+		            field : 'id',
+		            title : '记录ID'
+		        },{
+		            field : 'name',
+		            title : '名字'
+		        },{
+		            field : 'materials',
+		            title : '材料',
+		            formatter : function(value, row, index) {
+						var s = '<button class="btn btn-info btn-sm edit"><span>详细</span> </button>';
+						var fun = '';
+						return s;
+					},
+					events : {
+						// 操作列中编辑按钮的动作
+						'click .edit' : function(e, value,
+								row, index) {
+							rowDetailOperation(row);
+						},
+						
+					}
+		        },{
+		            field : 'time',
+		            title : '时间'
+		        },{
+		            field : 'plus',
+		            title : '状态/管理员'
+		        }],
+		        data:json,
+		        method : 'GET',
+	            dataType : 'json',
+	            pagination : true,
+	            pageNumber : 1,
+	            pageSize : 5,
+	            pageList : [ 5, 10, 25, 50, 100 ],
+	            clickToSelect : true
+		    });
+		});
+	    
+	}
+	function rowDetailOperation(row) {
+		console.log(1);
+		console.log(row);
+		$('#detail_modal').modal("show");
+		$('#userName').text(row.name);
+		$('#time').text(row.time);
+		let information = document.querySelector('#information');
+		information.innerHTML = "";
+		eval(row.materials).forEach(function(item){
+			
+			information.innerHTML+=`<tr aligin=center height='40px'>
+				<td>${item.material}</td>
+				<td>${item.materialId}}</td>
+				<td>${item.number}</td>
+				<td>${item.unit}</td>
+			</tr>`;
+		});
+		
+		/* information.innerHTML+="<tr align=center>"+
+		"<td>"+json[i].material+"</td>"+
+		"<td>"+json[i].materialId+"</td>"+
+		"<td>"+json[i].number+"</td>"+
+		"<td>"+json[i].unit+"</td>"+
+		"</tr>"; */
+		// load info
+	
+	}
+	// 表格刷新
+	function tableRefresh(search_id) {
+		fetch('Material/allRequestInfo')
+		.then(function(response){
+			return response.json();
+		}).then(function(json){
+			console.log(search_id);
+			json=json.filter(function(item){
+				return item.id == search_id || item.name == search_id || item.plus == search_id;
+			})
+			$('#userOperationRecordTable').bootstrapTable('load', json);
+
+		});
+		
+	}
+
+	// 分页查询参数
+/* 	function queryParams(params) {
+		var temp = {
+			limit : params.limit,
+			offset : params.offset,
+			userID : search_user_id,
+			startDate : search_start_date,
+			endDate : search_end_date
+		}
+		return temp;
+	} */
+
+    // 查询操作
+    function searchActionInit(){
+        $('#search_button').click(function(){
+            search_user_id = $('#user_id').val();
+            search_start_date = $('#start_date').val();
+            search_end_date = $('#end_date').val();
+            tableRefresh(search_user_id);
+        })
+    }
+</script>
+
+<div class="panel panel-default">
+    <ol class="breadcrumb">
+        <li>系统日志</li>
+    </ol>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+<!--                 <form action="" class="form-inline">
+ -->                    <div class="form-group">
+<!--                         <label class="form-label">用户ID：</label>
+ -->                        <input type="text" id="user_id" class="form-control" placeholder="输入ID/名字/管理员" style="width:50%">
+                    </div>
+                <!-- </form> -->
+            </div>
+          <!--   <div class="col-md-7">
+                <form action="" class="form-inline">
+                    <label class="form-label">日期范围：</label>
+                    <input class="form_date form-control" id="start_date" placeholder="起始日期">
+                    <label class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;</label>
+                    <input class="form_date form-control" id="end_date" placeholder="结束日期">
+                </form>
+            </div> -->
+            <div class="col-md-2">
+                <button class="btn btn-success" id="search_button">
+                    <span class="glyphicon glyphicon-search"></span> <span>查询</span>
+                </button>
+            </div>
+        </div>
+        <div class="row" style="margin-top:25px">
+            <div class="col-md-12">
+                <table class="table table-striped" id="userOperationRecordTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="detail_modal" class="modal fade" table-index="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true"
+	data-backdrop="static">
+	<div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <table  border=1; cellpadding=12; cellspacing=0; align=center id="modalTable">
+				<tr align=center>
+					<td colspan="4">领料单</td>
+				</tr>
+				<tr align=center>
+					<td>领料人姓名:</td>
+					<td colspan="3" id="userName"></td>
+					
+				</tr>
+				<tr align=center>
+					<td>领料日期:</td>
+					<td colspan="3" id="time"></td>
+				</tr>
+				
+				<tr align=center>
+					<td colspan="4">领料信息</td>
+				</tr>
+				<tr align=center>
+					<td>物品名称</td>
+					<td>物品编号</td>
+					<td>数量</td>
+					<td>单位</td>
+					
+				</tr>
+				<tbody id="information">
+				<tr align=center>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tbody>
+				
+			</table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="identifyExport" data-dismiss="modal">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
