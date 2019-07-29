@@ -7,10 +7,7 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
-	</head>
-
-	<body>
-		<style type="text/css">
+	<style type="text/css">
 		table {
 				width: 100%;
 			}
@@ -18,9 +15,41 @@
 			input {
 				width: 100%;
 			}
+			.supplier{
+				width:100%;
+				height: 100px;
+				position: absolute;
+				display: block;
+			}
 		}
+   
 		</style>
-		<div class="panel panel-default">
+	</head>
+
+	<body>
+		
+	<div class="panel panel-default">
+    	<div class="row" id="supplier">
+    	   <div class="col-md-1" >
+            <h5>供应商：</h5> 
+         </div>
+  	     <div class="col-md-1">
+           <button class="btn ">新益</button> 
+         </div>
+                    <button class="btn ">益</button> 
+         
+    	</div>
+    	
+    	<div class="row" id="manufacturer">
+    		<div class="col-md-1" >
+          	  <h5>厂商：</h5> 
+          	</div>     
+	  	     <div class="col-md-1" >
+	           <button class="btn ">新益</button> 
+	         </div>
+        	      
+        </div>
+    
 			<form action="">
 				<table class="table table-bordered">
 					<thead>
@@ -77,6 +106,7 @@
 		</div>
 		<script>
 		const tableWidth = 18;
+		let batchManage = new Date().toString().split(' ').join('').slice(0,20);
 			let fill = `<tr>
 		      <td><input type='text'  oninput="searchForFill(this.value)"></td>
 		      <td><input type='text'></td>
@@ -198,11 +228,17 @@
         let allArray = document.querySelectorAll('table input');
     	let index = allArray.length-tableWidth;
     	let inputItem = allArray[index];
+
     	$(inputItem).autocomplete({
       	  source:arr,
     	  select:function(event,ui){
     		  console.log(ui.item.label);
     		  fillByMaterialId(index,ui.item.label,result);
+    		  return false;
+    	  },
+    	  focus:function(event,ui){
+    	 	 let info = result.filter(item => item.materialId == ui.item.label);
+        	  allArray[index+2].value = info[0].materialName;
     		  return false;
     	  }
     	  });
@@ -214,6 +250,7 @@
     	  //填充info
     	  console.log({info});
     	  let inputArrays = document.querySelectorAll('table input');
+    	  inputArrays[row+0].value = info[0].materialId;
     	  inputArrays[row+1].value = info[0].viceId;
     	  inputArrays[row+2].value = info[0].materialName;
         inputArrays[row+3].value = info[0].materialSpec;
@@ -236,9 +273,32 @@
             inputs[i*tableWidth+12].value = number * priceIncludeTax;		
     	  }
       }
+		function pageInit(){
+			let father = document.querySelector('#supplier');
+			let father2 = document.querySelector('#manufacturer');
+			father.onclick=function(ev){
+				let allInput = document.querySelectorAll('table input');
+				for(let i=0;i<allInput.length/tableWidth;i++){
+					allInput[i*tableWidth+16].value = ev.target.innerText;
+					allInput[i*tableWidth+14].value = batchManage;
+				}
+			}
+			father2.onclick=function(ev){
+				let allInput = document.querySelectorAll('table input');
+				for(let i=0;i<allInput.length/tableWidth;i++){
+					allInput[i*tableWidth+15].value = ev.target.innerText;
+					allInput[i*tableWidth+14].value = batchManage;
 
+				}
+				console.log(batchManage);
+			}
+			
+
+		}
+		
       
-      
+		window.onload=pageInit();
+
     	
       
 		</script>

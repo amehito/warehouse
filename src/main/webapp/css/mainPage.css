@@ -20,6 +20,9 @@ a:link{
 	width:80%;	
 
 }
+.noticePanel{
+	background:#50b7c1;
+}
 #modalTable{
 	width:100%;
 	height :300px;

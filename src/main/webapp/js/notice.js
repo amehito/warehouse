@@ -51,7 +51,7 @@ function showNotification(text){
 	function show(item){
 		console.log({item});
 		let html = `
-		<div class="panel panel-default" data-toggle="modal" data-target="#myModal" onclick="seeInformation(${item.id})">
+		<div class="panel panel-default noticePanel" data-toggle="modal" data-target="#myModal" onclick="seeInformation(${item.id})" style="background:#50b7c1" >
 			<div class="panel-body">
 				有一条来自<strong>${item.name}</strong>的取料请求，编号为<strong>${item.id}</strong>  点击我查看 :)
   			</div>
