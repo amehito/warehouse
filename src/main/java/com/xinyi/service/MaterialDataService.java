@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xinyi.bean.XinyiActionExample.Criteria;
 import com.xinyi.bean.XinyiImport;
 import com.xinyi.bean.XinyiMaterial;
+import com.xinyi.bean.XinyiMaterialExample;
 import com.xinyi.bean.XinyiModifyhistory;
 import com.xinyi.bean.XinyiPicking;
 import com.xinyi.bean.XinyiPickingExample;
@@ -33,11 +37,10 @@ public class MaterialDataService {
 	public static ObjectMapper jsonCreater = new ObjectMapper();
 	static SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	public static String getMaterialInfo() throws JsonProcessingException {
-		
-		
-		XinyiMaterialMapper mapper = sqlSession.getMapper(XinyiMaterialMapper.class);
-		ArrayList<XinyiMaterial> list = (ArrayList<XinyiMaterial>) mapper.selectAll();	
+	static XinyiMaterialMapper materialMapper = sqlSession.getMapper(XinyiMaterialMapper.class);
+
+	public static String getMaterialInfo() throws JsonProcessingException {	
+		ArrayList<XinyiMaterial> list = (ArrayList<XinyiMaterial>) materialMapper .selectAll();	
 		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
 		String result = jsonCreater.writeValueAsString(list);
 	//	System.out.println("service"+result);
@@ -192,14 +195,71 @@ public class MaterialDataService {
 
 		return result;
 	}
-	public static void saveList(List<XinyiImport> info) {
+	public static String saveList(List<XinyiImport> info,HttpSession session) {
 		// TODO Auto-generated method stub
 		XinyiImportMapper mapper = sqlSession.getMapper(XinyiImportMapper.class);
 		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH-mm-ss"));
-		for(XinyiImport item : info) {
-			mapper.insert(item);
+		try {
+			for(XinyiImport item : info) {
+				mapper.insert(item);
+			}
+			sqlSession.commit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "添加失败，请稍后再试";
 		}
-		sqlSession.commit();
+		//更新材料数据
+		XinyiMaterialExample example = new XinyiMaterialExample();
+		try {
+			for(XinyiImport item : info) {
+				com.xinyi.bean.XinyiMaterialExample.Criteria criteria = example.createCriteria();
+				criteria.andMaterialIdEqualTo(item.getMaterialId());
+				XinyiMaterial material = materialMapper.selectByPrimaryKey(item.getMaterialId());
+				
+				if(material == null) {
+					material = new XinyiMaterial();
+					material.setMaterialId(item.getMaterialId());
+					material.setViceId(item.getViceId());
+					material.setMaterialName(item.getMaterialName());
+					material.setMaterialSpec(item.getMaterialSpec());
+					material.setWarehousePosition(item.getWarehousePosition());
+					material.setPlus(item.getPlus());
+					//type 和size对应
+					material.setMaterialType(item.getSize());
+					material.setMaterialUnit(item.getUnit());
+					material.setMaterialPrice(item.getPrice().floatValue());
+					material.setStockNumber(item.getImportNumber());
+					material.setStockSafe(item.getImportNumber());
+					material.setBatchManage(item.getBatchManage());
+					material.setStartTime(new Date());
+					material.setCreateManager((String) session.getAttribute("UserName"));
+					materialMapper.insert(material);
+					
+				}
+				else {
+					material.setViceId(item.getViceId());
+					material.setMaterialSpec(item.getMaterialSpec());
+					material.setWarehousePosition(item.getWarehousePosition());
+					material.setPlus(item.getPlus());
+					//type 和size对应
+					material.setMaterialType(item.getSize());
+					material.setMaterialUnit(item.getUnit());
+					material.setStockNumber(item.getImportNumber()+material.getStockNumber());
+					material.setBatchManage(item.getBatchManage()+","+material.getBatchManage());
+					material.setFinishTime(new Date());
+					material.setChangeManager((String) session.getAttribute("UserName"));
+					materialMapper.updateByPrimaryKeySelective(material);
+				}
+				
+			}
+			sqlSession.commit();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			return "添加成功";
+		}
 	}
 	
 	

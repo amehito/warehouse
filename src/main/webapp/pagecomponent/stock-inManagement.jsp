@@ -21,14 +21,31 @@
 				position: absolute;
 				display: block;
 			}
+			#inputGroup{
+				width:80%;
+				margin: 0 auto;
+			}
 		}
    
 		</style>
 	</head>
 
 	<body>
-		
 	<div class="panel panel-default">
+    <div class="row" >
+         
+         <div class="input-group" id="inputGroup">
+		  <div class="input-group-btn">
+		    <!-- Buttons -->
+		    <button class="btn btn-info">厂家</button>
+		    <button class="btn btn-danger">供应商</button>
+		    
+		  </div>
+		  <input type="text" class="form-control">
+		</div>
+         
+         
+      </div>
     	<div class="row" id="supplier">
     	   <div class="col-md-1" >
             <h5>供应商：</h5> 
@@ -178,10 +195,10 @@
 				type:'POST',
 				async:false,
 				data:JSON.stringify(materialData),
-				dataType:'json',
+				dataType:'text',
 				contentType:"application/json",
-				success:function(){
-					
+				success:function(response){
+					alert(response);
 				}
 			})
 		}

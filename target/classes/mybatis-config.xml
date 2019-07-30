@@ -30,6 +30,7 @@
 <mapper resource="com/xinyi/mapper/XinyiManufacturesMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiPickingMapper.xml" />
 <mapper resource="com/xinyi/mapper/XinyiImportMapper.xml" />
+<mapper resource="com/xinyi/mapper/XinyiSupplierInfoMapper.xml" />
 
 </mappers>
 

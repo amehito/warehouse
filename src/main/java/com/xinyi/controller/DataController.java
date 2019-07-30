@@ -41,16 +41,8 @@ public class DataController {
 
     
     @RequestMapping(value="/importMaterials",produces="application/json;charset=utf-8")
-	public @ResponseBody String importMateriasls(@RequestBody List<XinyiImport>info,HttpServletRequest request) throws JsonProcessingException {
-    	System.out.println(123);
-    	MaterialDataService.saveList(info);
-    	Map<String,String[]> params =  request.getParameterMap();
-         for(Map.Entry<String,String[]> entry:params.entrySet()){
-             System.out.println("key:"+entry.getKey()+" value:"+ Arrays.asList(entry.getValue()));
-             
-         }
-         
-    	String result = "";
+	public @ResponseBody String importMateriasls(@RequestBody List<XinyiImport>info,HttpSession session) throws JsonProcessingException {
+    	String result =MaterialDataService.saveList(info,session);	
     	return result;
     }
 	
