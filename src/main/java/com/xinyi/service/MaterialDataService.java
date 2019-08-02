@@ -15,16 +15,20 @@ import org.apache.ibatis.session.SqlSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xinyi.bean.XinyiActionExample.Criteria;
+import com.xinyi.bean.XinyiBatchStock;
+import com.xinyi.bean.XinyiBatchStockExample;
 import com.xinyi.bean.XinyiImport;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiMaterialExample;
 import com.xinyi.bean.XinyiModifyhistory;
 import com.xinyi.bean.XinyiPicking;
 import com.xinyi.bean.XinyiPickingExample;
+import com.xinyi.dao.XinyiBatchStockMapper;
 import com.xinyi.dao.XinyiImportMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiModifyhistoryMapper;
 import com.xinyi.dao.XinyiPickingMapper;
+import com.xinyi.test.Material;
 import com.xinyi.test.notifyModel;
 import com.xinyi.utils.MybatisOfSpringUtil;
 
@@ -140,7 +144,10 @@ public class MaterialDataService {
 	public static boolean passRequest(int id,String admin) {
 		// TODO Auto-generated method stub
 		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+	    XinyiBatchStockMapper stockMapper = sqlSession.getMapper(XinyiBatchStockMapper.class);
+	    
 		try {
+			List<Material> list = new ArrayList<Material>();
 			XinyiPicking record = new XinyiPicking();
 			record.setId(id);
 			record.setPlus(admin+"通过");
@@ -149,18 +156,60 @@ public class MaterialDataService {
 			XinyiMaterial material;
 			String data = mapper.selectByPrimaryKey(id).getMaterials();
 			com.alibaba.fastjson.JSONArray jsonArray = com.alibaba.fastjson.JSONArray.parseArray(data);
+		    
 			for(int i=0;i<jsonArray.size();i++) {
 				com.alibaba.fastjson.JSONObject object = jsonArray.getJSONObject(i);
-			    String materialId =	(String) object.get("materialId");
-			   
+			    String materialId =	(String) object.get("materialId");   
 			    int num = object.getIntValue("number");
 			    material = materialMapper.selectByPrimaryKey(materialId);
 			    int stockNum = material.getStockNumber();
 			    material.setStockNumber(stockNum - num);
 			    materialMapper.updateByPrimaryKey(material);
+			    
+				//更改batchStock表数量
+				XinyiBatchStockExample stockExample = new XinyiBatchStockExample();
+			    com.xinyi.bean.XinyiBatchStockExample.Criteria criteria = stockExample.createCriteria();
+			    criteria.andMaterialidEqualTo((String) object.get("materialId"));
+			    List<XinyiBatchStock> stockList = stockMapper.selectByExample(stockExample);
+			    int _num = num;
+			    double totalPrice = 0;
+			    System.out.println(stockList.size());
+			    for(XinyiBatchStock item:stockList) {
+			    	if(item.getNumber()==0)
+			    		continue;
+			    	
+			    	if(item.getNumber() > _num) {
+			    		totalPrice += _num * item.getPrice();
+			    		item.setNumber(item.getNumber()-_num);
+			    		_num = 0;
+			    		stockMapper.updateByPrimaryKeySelective(item);
+			    		break;
+			    	}
+			    	else {
+			    		totalPrice += item.getNumber()*item.getPrice();
+			    		_num -=item.getNumber();
+			    		item.setNumber(0);
+			    		stockMapper.updateByPrimaryKeySelective(item);
+
+			    	}
+			    }
+			    //将价格添加到json中
+			    
+			    Material materialJson = new Material();
+			    System.out.println("totalPrice"+totalPrice);
+			    System.out.println("materialnum:"+num+"  _num:"+_num);
+			    materialJson.setTotalPrice(totalPrice);
+			    materialJson.setMaterialId(materialId);
+			    materialJson.setNumber(num-_num);
+			    materialJson.setMaterial((String) object.get("material"));
+			    materialJson.setUnit((String) object.get("unit"));
+			    list.add(materialJson);
 			}
+			String factJson = jsonCreater.writeValueAsString(list);
+			record.setFactMaterials(factJson);
 			mapper.updateByPrimaryKeySelective(record);
 			sqlSession.commit();
+		    
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO Auto-generated catch block
@@ -168,6 +217,11 @@ public class MaterialDataService {
 		}
 		
 		return true;
+		
+	}
+	
+	private static void updateBatchStock() {
+		// TODO Auto-generated method stub
 		
 	}
 	public static boolean declineRequest(int id, String admin) {
@@ -246,7 +300,9 @@ public class MaterialDataService {
 					material.setMaterialType(item.getSize());
 					material.setMaterialUnit(item.getUnit());
 					material.setStockNumber(item.getImportNumber()+material.getStockNumber());
-					material.setBatchManage(item.getBatchManage()+","+material.getBatchManage());
+					if(!material.getBatchManage().contains(item.getBatchManage())) {
+						material.setBatchManage(item.getBatchManage()+","+material.getBatchManage());
+					}
 					material.setFinishTime(new Date());
 					material.setChangeManager((String) session.getAttribute("UserName"));
 					materialMapper.updateByPrimaryKeySelective(material);
@@ -254,12 +310,38 @@ public class MaterialDataService {
 				
 			}
 			sqlSession.commit();
+			//记录到库存表中
+			addToStockTable(info);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			return "添加成功";
 		}
+	}
+	private static void addToStockTable(List<XinyiImport> info) {
+		// TODO Auto-generated method stub
+		XinyiBatchStock batchStock = new XinyiBatchStock();
+		XinyiBatchStockMapper mapper = sqlSession.getMapper(XinyiBatchStockMapper.class);
+		for(XinyiImport item:info) {
+			batchStock.setBatch(item.getBatchManage());
+			batchStock.setMaterialid(item.getMaterialId());
+			batchStock.setName(item.getMaterialName());
+			batchStock.setNumber(item.getImportNumber());
+			batchStock.setPrice(item.getPriceIncludeTax());
+			batchStock.setPlus(item.getTaxRate().toString());
+			mapper.insert(batchStock);
+		}
+		sqlSession.commit();
+	}
+	public static String getAllImportInfo() throws JsonProcessingException {
+		// TODO Auto-generated method stub
+		
+		XinyiImportMapper mapper = sqlSession.getMapper(XinyiImportMapper.class);
+		List<XinyiImport> list  = mapper.selectAll();
+		jsonCreater.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));
+		String result = jsonCreater.writeValueAsString(list);
+		return result;
 	}
 	
 	

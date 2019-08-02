@@ -2,8 +2,12 @@ package com.xinyi.dao;
 
 import com.xinyi.bean.XinyiImport;
 import com.xinyi.bean.XinyiImportExample;
+import com.xinyi.bean.XinyiManufactures;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.junit.experimental.theories.FromDataPoints;
 
 public interface XinyiImportMapper {
 
@@ -72,4 +76,6 @@ public interface XinyiImportMapper {
 	 * @mbg.generated  Sat Jul 27 13:57:14 CST 2019
 	 */
 	int updateByPrimaryKey(XinyiImport record);
+	
+	public List<XinyiImport> selectAll();
 }

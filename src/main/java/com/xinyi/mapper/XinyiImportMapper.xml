@@ -106,6 +106,9 @@
     price_include_tax, price, tax_rate, size, tax, total_price_include_tax, total_price, 
     unit, batch_manage, supplier, manufacturing, plus, xinyi_inportcol
   </sql>
+  <select id="selectAll" resultMap="BaseResultMap">
+  	select * from xinyi_import
+  </select>
   <select id="selectByExample" parameterType="com.xinyi.bean.XinyiImportExample" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated

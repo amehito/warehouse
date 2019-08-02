@@ -4,6 +4,14 @@ public class Material{
 		private String materialId;
 		private int number;
 		private String unit;
+		public double getTotalPrice() {
+			return totalPrice;
+		}
+		public void setTotalPrice(double totalPrice) {
+			this.totalPrice = totalPrice;
+		}
+		private double totalPrice;
+
 		public String getMaterial() {
 			return material;
 		}

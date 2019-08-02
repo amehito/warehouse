@@ -2,12 +2,12 @@ package com.xinyi.test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
-import java.awt.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.SimpleFormatter;
 
@@ -23,12 +23,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.xinyi.bean.XinyiImport;
 import com.xinyi.bean.XinyiMaterial;
 import com.xinyi.bean.XinyiPicking;
 import com.xinyi.bean.XinyiPickingExample;
 import com.xinyi.bean.XinyiUser;
 import com.xinyi.bean.XinyiUserExample;
 import com.xinyi.bean.XinyiUserExample.Criteria;
+import com.xinyi.dao.XinyiImportMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiPickingMapper;
 import com.xinyi.dao.XinyiUserMapper;
@@ -103,24 +105,10 @@ public class MapperTest {
 	//新益picking测试
 	@Test
 	public void tt() throws InterruptedException {		
-		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();		
-		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);		
-//		XinyiPickingExample example = new XinyiPickingExample();
-//		com.xinyi.bean.XinyiPickingExample.Criteria criteria = example.createCriteria();
-//		criteria.andIdEqualTo(8);
-		
-//		XinyiPicking record = new XinyiPicking();
-//		record.setPlus("测试");
-//		record.setMaterials("测试");
-//		record.setName("ye");
-//		SimpleDateFormat frDateFormat = new SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
-//		Date now = new Date();
-//		System.out.println(now);
-//		record.setTime(new Date());
-//		mapper.insertSelective(record);
-		XinyiPickingMapper pickMapper = sqlSession.getMapper(XinyiPickingMapper.class);
-		System.out.println(pickMapper.selectAll().get(3).getTime());
-		sqlSession.commit();
+		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
+		List<XinyiImport> list = sqlSession.getMapper(XinyiImportMapper.class).selectAll();
+		System.out.println(list.size());
+		System.out.println(1);
 	}
 	
 	

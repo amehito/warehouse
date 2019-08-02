@@ -45,6 +45,12 @@ public class DataController {
     	String result =MaterialDataService.saveList(info,session);	
     	return result;
     }
+    
+    @RequestMapping(value="/allImportInfo",produces="application/json;charset=utf-8")
+    public @ResponseBody String ImportInfo() throws JsonProcessingException {
+    	String result = MaterialDataService.getAllImportInfo();
+    	return result;
+    }
 	
 	@RequestMapping(value="/notificationInit",produces="application/json;charset=utf-8")
 	public @ResponseBody String notificationInit() throws JsonProcessingException {
@@ -86,10 +92,9 @@ public class DataController {
 	@RequestMapping(value="/passRequest",produces="application/json;charset=utf-8")
 	public @ResponseBody String passRequest(HttpServletRequest request,@RequestBody  String id,HttpSession session)  {
 		System.out.println(request.getParameterMap().entrySet().size());
-		System.out.println("id"+id);
 		String admin = (String) session.getAttribute("UserName");
 		if(!MaterialDataService.passRequest(Integer.parseInt(id),admin)) {
-			return"PassFailure";
+			return"出库失败";
 		}
 		changeNotifyState();
 		return "出库成功";

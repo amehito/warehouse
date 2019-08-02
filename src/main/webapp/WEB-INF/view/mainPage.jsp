@@ -221,7 +221,7 @@ pageEncoding="UTF-8"%>
                                 <shiro:hasRole name="systemAdmin">
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id=""
-                                           class="menu_item" name="pagecomponent/userOperationRecorderManagement.html">系统日志</a>
+                                           class="menu_item" name="pagecomponent/userOperationRecorderManagement.html">出库日志</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id=""
@@ -250,7 +250,10 @@ pageEncoding="UTF-8"%>
                                 </li>
                                 
                                     <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/userOperationRecorderManagement.html">系统日志</a>
+                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/userOperationRecorderManagement.html">出库日志</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/stock-inManagementRecords.html">入库日志</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/stock-inManagement.jsp">入库</a>
