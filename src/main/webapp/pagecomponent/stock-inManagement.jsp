@@ -37,8 +37,8 @@
          <div class="input-group" id="inputGroup">
 		  <div class="input-group-btn">
 		    <!-- Buttons -->
-		    <button class="btn btn-info">厂家</button>
-		    <button class="btn btn-danger">供应商</button>
+		    <button class="btn btn-info" id="editManufacturer">厂家</button>
+		    <button class="btn btn-danger" id="editSupplier">供应商</button>
 		    
 		  </div>
 		  <input type="text" class="form-control">
@@ -52,9 +52,7 @@
          </div>
   	     <div class="col-md-1">
            <button class="btn ">新益</button> 
-         </div>
-                    <button class="btn ">益</button> 
-         
+         </div>  
     	</div>
     	
     	<div class="row" id="manufacturer">
@@ -155,9 +153,31 @@
     .then(response => response.json())
     .then(data=>{
     	allMaterial = data
-    	
     });
  		 
+    document.querySelector('#editSupplier').addEventListener('click',editSupplier);
+    document.querySelector('#editManufacturer').addEventListener('click',editManufacturer);
+    let supplierInfo;
+    fetch('OtherInfo/supplier',{
+      headers:new Headers({
+          "Content-Type":"application/json",
+      }),
+      method:'get',
+    })
+    .then(response => response.json())
+    .then(data => {
+      supplierInfo = data;
+      console.log(data);
+    })
+    function editSupplier(){
+      console.log(1);
+    }
+
+    function editManufacturer(){
+      console.log(2);
+    }
+
+
 		function submitData() {
 			let materialData = [];
 			materialData = eval(materialData);
@@ -178,8 +198,8 @@
             taxRate:inputs[i*tableWidth+8].value,
             size:inputs[i*tableWidth+9].value,
             tax:inputs[i*tableWidth+10].value,
-            totalPriceIncludeTax:inputs[i*tableWidth+11].value,
-            totalPrice:inputs[i*tableWidth+12].value,
+            totalPrice:inputs[i*tableWidth+11].value,
+            totalPriceIncludeTax:inputs[i*tableWidth+12].value,
             unit:inputs[i*tableWidth+13].value,
             batchManage:inputs[i*tableWidth+14].value,
             supplier:inputs[i*tableWidth+15].value,

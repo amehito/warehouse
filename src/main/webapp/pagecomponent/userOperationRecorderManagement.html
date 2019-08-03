@@ -112,19 +112,45 @@
 	
 	}
 	// 表格刷新
-	function tableRefresh(search_id) {
+	function tableRefresh(search_id,search_start_date,search_end_date) {
 		fetch('Material/allRequestInfo')
 		.then(function(response){
 			return response.json();
 		}).then(function(json){
 			console.log(search_id);
 			json=json.filter(function(item){
-				return item.id == search_id || item.name == search_id || item.plus == search_id;
+				if(search_id == '' && search_start_date =='' && search_end_date ==''){
+					return true;
+				} 
+				else if(search_start_date =='' && search_end_date==''){
+					console.log(2);
+
+					return item.id == search_id || item.name == search_id || item.plus == search_id;
+				}
+				else if(search_id==''){
+
+					return filterDate(item.time ,search_start_date,search_end_date);
+				}
+				else{
+					console.log(4);
+					console.log({search_id,item});
+					return (item.id == search_id || item.name == search_id || item.plus == search_id) && filterDate(item.time,search_start_date,search_end_date);
+				}	
 			})
 			$('#userOperationRecordTable').bootstrapTable('load', json);
 
 		});
 		
+	}
+	function filterDate(time,search_start_date,search_end_date){
+		let [year,month,day] = time.substring(0,10).split('-');
+		let startDate = search_start_date.split('-');
+		let endDate = search_end_date.split('-');
+		console.log({startDate,endDate})
+		return parseInt(month)>=parseInt(startDate[1]) && parseInt(month)<=parseInt(endDate[1])
+			&&parseInt(year)>=parseInt(startDate[0]) && parseInt(year)<=parseInt(endDate[0])
+			&&parseInt(day)>=parseInt(startDate[2]) && parseInt(day)<=parseInt(endDate[2])
+		;
 	}
 
 	// 分页查询参数
@@ -145,7 +171,7 @@
             search_user_id = $('#user_id').val();
             search_start_date = $('#start_date').val();
             search_end_date = $('#end_date').val();
-            tableRefresh(search_user_id);
+            tableRefresh(search_user_id,search_start_date,search_end_date);
         })
     }
 </script>
@@ -164,20 +190,21 @@
                     </div>
                 <!-- </form> -->
             </div>
-          <!--   <div class="col-md-7">
+           <div class="col-md-5">
                 <form action="" class="form-inline">
                     <label class="form-label">日期范围：</label>
                     <input class="form_date form-control" id="start_date" placeholder="起始日期">
                     <label class="form-label">&nbsp;&nbsp;-&nbsp;&nbsp;</label>
                     <input class="form_date form-control" id="end_date" placeholder="结束日期">
                 </form>
-            </div> -->
-            <div class="col-md-2">
+            
+            
+        </div>
+        <div class="col-md-2">
                 <button class="btn btn-success" id="search_button">
                     <span class="glyphicon glyphicon-search"></span> <span>查询</span>
                 </button>
-            </div>
-        </div>
+         </div>
         <div class="row" style="margin-top:25px">
             <div class="col-md-12">
                 <table class="table table-striped" id="userOperationRecordTable"></table>

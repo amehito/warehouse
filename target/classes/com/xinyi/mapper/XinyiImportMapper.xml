@@ -139,6 +139,7 @@
     from xinyi_import
     where id = #{id,jdbcType=INTEGER}
   </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated

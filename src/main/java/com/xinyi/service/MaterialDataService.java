@@ -164,6 +164,7 @@ public class MaterialDataService {
 			    material = materialMapper.selectByPrimaryKey(materialId);
 			    int stockNum = material.getStockNumber();
 			    material.setStockNumber(stockNum - num);
+			    double materialTablePrice = material.getMaterialPrice();
 			    materialMapper.updateByPrimaryKey(material);
 			    
 				//更改batchStock表数量
@@ -175,11 +176,17 @@ public class MaterialDataService {
 			    double totalPrice = 0;
 			    System.out.println(stockList.size());
 			    for(XinyiBatchStock item:stockList) {
-			    	if(item.getNumber()==0)
+			    	if(item.getNumber()==0) {
+			    		stockMapper.deleteByPrimaryKey(item.getId());
 			    		continue;
-			    	
+			    	}
 			    	if(item.getNumber() > _num) {
-			    		totalPrice += _num * item.getPrice();
+			    		if(item.getPrice()<=0.1) {
+			    			totalPrice += _num * materialTablePrice;
+			    		}
+			    		else {
+			    			totalPrice += _num * item.getPrice();
+			    		}
 			    		item.setNumber(item.getNumber()-_num);
 			    		_num = 0;
 			    		stockMapper.updateByPrimaryKeySelective(item);

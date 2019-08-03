@@ -1,5 +1,6 @@
 package com.xinyi.dao;
 
+import com.xinyi.bean.XinyiImport;
 import com.xinyi.bean.XinyiSupplierInfo;
 import com.xinyi.bean.XinyiSupplierInfoExample;
 import java.util.List;
@@ -93,4 +94,6 @@ public interface XinyiSupplierInfoMapper {
      * @mbg.generated Tue Jul 30 12:31:49 CST 2019
      */
     int updateByPrimaryKey(XinyiSupplierInfo record);
+
+	public List<XinyiSupplierInfo> selectAll();
 }

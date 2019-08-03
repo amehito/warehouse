@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xinyi.bean.XinyiManufactures;
+import com.xinyi.bean.XinyiSupplierInfo;
 import com.xinyi.dao.XinyiManufacturesMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
+import com.xinyi.dao.XinyiSupplierInfoMapper;
 import com.xinyi.utils.MybatisOfSpringUtil;
 
 @Controller
@@ -36,5 +38,15 @@ public class OthersController {
 		System.out.println(result);
 		return result ;
 		
+	}
+	
+	@RequestMapping(value="/supplier",method=RequestMethod.GET
+			,produces="application/json;charset=utf-8")
+	public @ResponseBody String getSupplierInfo() throws JsonProcessingException {
+		XinyiSupplierInfoMapper mapper = sqlSession.getMapper(XinyiSupplierInfoMapper.class);
+		List<XinyiSupplierInfo> list = mapper.selectAll();
+		System.out.println(list.size());
+		
+		return jsonCreater.writeValueAsString(list);
 	}
 }

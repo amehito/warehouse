@@ -109,6 +109,9 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+  	select * from xinyi_supplier_info
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
