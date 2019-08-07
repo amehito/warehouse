@@ -26,9 +26,10 @@ import com.xinyi.bean.XinyiPicking;
 import com.xinyi.service.MaterialDataService;
 import com.xinyi.test.Material;
 import com.xinyi.test.notifyModel;
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @Controller
 @RequestMapping("/Material")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class DataController {
 	notifyModel notify;
 	final static int  materialInfoNumber = 4;
@@ -44,6 +45,12 @@ public class DataController {
     @RequestMapping(value="/importMaterials",produces="application/json;charset=utf-8")
 	public @ResponseBody String importMateriasls(@RequestBody List<XinyiImport>info,HttpSession session) throws JsonProcessingException {
     	String result =MaterialDataService.saveList(info,session);	
+    	return result;
+    }
+    
+    @RequestMapping(value="/allRecord",produces="application/json;charset=utf-8")
+	public @ResponseBody String getAllRecord() throws JsonProcessingException {
+    	String result =MaterialDataService.getAllRecord();	
     	return result;
     }
     
@@ -129,6 +136,11 @@ public class DataController {
 		return result;
 	}
 	
+	@RequestMapping(value="/materialsById",produces="application/json;charset=utf-8")
+	public @ResponseBody String materialsById(String id) throws JsonProcessingException {
+		return MaterialDataService.getMaterialsByBaoxiuId(id);
+	}
+	
 	@RequestMapping(value="/notify",produces="application/json;charset=utf-8")
 	@ResponseBody
 	public String Notice(@RequestParam(value="materials[0][materialId]",required = false) String info,
@@ -148,6 +160,13 @@ public class DataController {
         }
         
         notify = new notifyModel();
+        try {
+        	notify.setBaoxiuId(params.get("baoxiu_id")[0]);
+        }catch (Exception e) {
+			// TODO: handle exception
+        	e.printStackTrace();
+		}
+        System.out.println("baoxiu_id"+notify.getBaoxiuId());
         notify.setAdmin(params.get("user")[0]);
         notify.setTime(format.parse(params.get("Time")[0]));
  //       System.out.println(notify.getAdmin());

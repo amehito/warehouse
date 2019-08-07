@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+
 <!DOCTYPE html>
 <html>
 
@@ -41,7 +40,7 @@
 		    <button class="btn btn-danger" id="editSupplier">供应商</button>
 		    
 		  </div>
-		  <input type="text" class="form-control">
+		  <input type="text" class="form-control" id="supplierName">
 		</div>
          
          
@@ -50,18 +49,14 @@
     	   <div class="col-md-1" >
             <h5>供应商：</h5> 
          </div>
-  	     <div class="col-md-1">
-           <button class="btn ">新益</button> 
-         </div>  
+  	      
     	</div>
     	
     	<div class="row" id="manufacturer">
     		<div class="col-md-1" >
           	  <h5>厂商：</h5> 
           	</div>     
-	  	     <div class="col-md-1" >
-	           <button class="btn ">新益</button> 
-	         </div>
+	  	     
         	      
         </div>
     
@@ -168,15 +163,42 @@
     .then(data => {
       supplierInfo = data;
       console.log(data);
+      supplierInfo.filter(item => item.type =='厂家').forEach(item =>{document.querySelector('#manufacturer').innerHTML+=`<button class='btn' >${item.name}</button>`})
+      supplierInfo.filter(item => item.type =='供应商').forEach(item =>{document.querySelector('#supplier').innerHTML+=`<button class='btn' >${item.name}</button>`})
     })
     function editSupplier(){
-      supplierInfo.filter(item => item.type =='供应商').forEach(item =>{document.querySelector('#supplier').innerHTML+=`<button>${item.name}</button>`})
-
+    	let name = document.querySelector('#supplierName').value;
+    	let father = document.querySelector('#supplier');
+    	let isPresence = false;
+    	document.querySelectorAll('#supplier button').forEach(function(item){
+    		if(item.innerText ==name){
+    			father.removeChild(item);
+    			isPresence = true;
+    		}
+    		
+    	})
+    	if(isPresence == false){
+    		
+    		father.innerHTML+=`<button class='btn' >${name}</button>`;
+    	}
 
     }
 
     function editManufacturer(){
-      console.log(2);
+    	let name = document.querySelector('#supplierName').value;
+    	let father = document.querySelector('#manufacturer');
+    	let isPresence = false;
+    	document.querySelectorAll('#manufacturer button').forEach(function(item){
+    		if(item.innerText ==name){
+    			father.removeChild(item);
+    			isPresence = true;
+    		}
+    		
+    	})
+    	if(isPresence == false){
+    		
+    		father.innerHTML+=`<button class='btn' >${name}</button>`;
+    	}
     }
 
 
@@ -204,7 +226,7 @@
             totalPriceIncludeTax:inputs[i*tableWidth+12].value,
             unit:inputs[i*tableWidth+13].value,
             batchManage:inputs[i*tableWidth+14].value,
-            supplier:inputs[i*tableWidth+15].value,
+            manufacturer:inputs[i*tableWidth+15].value,
             manufacturing:inputs[i*tableWidth+16].value,
             plus:inputs[i*tableWidth+17].value,
 						
@@ -259,14 +281,13 @@
     		arr.push(item.materialId);
     	});
 		console.log({arr}); */
-    	let result = allMaterial.filter(item => item.materialId.search(id)!== -1).slice(0,100);
+    	let result = allMaterial.filter(item => item.materialName.search(id)!== -1).slice(0,100);
         arr = [];
-        arr.push(id);
-        result.forEach(item => {arr.push(item.materialId)});
+        result.forEach(item => {arr.push(item.materialName)});
         console.log({arr})
         let allArray = document.querySelectorAll('table input');
     	let index = allArray.length-tableWidth;
-    	let inputItem = allArray[index];
+    	let inputItem = allArray[index+2];
 
     	$(inputItem).autocomplete({
       	  source:arr,
@@ -276,7 +297,7 @@
     		  return false;
     	  },
     	  focus:function(event,ui){
-    	 	 let info = result.filter(item => item.materialId == ui.item.label);
+    	 	 let info = result.filter(item => item.materialName == ui.item.label);
         	  allArray[index+2].value = info[0].materialName;
     		  return false;
     	  }
@@ -285,7 +306,7 @@
       }
       function fillByMaterialId(row,materialId,result){
     	  console.log({row,materialId,result});
-    	  let info = result.filter(item => item.materialId == materialId);
+    	  let info = result.filter(item => item.materialName == materialId);
     	  //填充info
     	  console.log({info});
     	  let inputArrays = document.querySelectorAll('table input');

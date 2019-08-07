@@ -16,7 +16,9 @@
 	</listener>
 	
 	
-    
+    <session-config>  
+	<session-timeout>1000</session-timeout>  
+	</session-config>
     <servlet>
         <servlet-name>spring</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

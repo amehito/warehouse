@@ -73,8 +73,6 @@ public interface XinyiPickingMapper {
 	 */
 	int updateByPrimaryKey(XinyiPicking record);
 
-	//这个表放维修工�?�还
-	@Select("select * from xinyi_picking")
 
     List<XinyiPicking> selectAll();
 }

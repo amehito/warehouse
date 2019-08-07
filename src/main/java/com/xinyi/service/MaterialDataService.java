@@ -112,6 +112,7 @@ public class MaterialDataService {
 		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
 		XinyiPicking record = new XinyiPicking();
 		System.out.println("admin:"+notify.getAdmin());
+		record.setBaoxiuId(notify.getBaoxiuId());
 		record.setName(notify.getAdmin());
 		record.setTime(new Date());
 		System.out.println(notify.getTime()+"传入时间："+notify.getTime());
@@ -175,42 +176,68 @@ public class MaterialDataService {
 			    int _num = num;
 			    double totalPrice = 0;
 			    System.out.println(stockList.size());
+			    Material materialJson = new Material();
 			    for(XinyiBatchStock item:stockList) {
+			    	
 			    	if(item.getNumber()==0) {
 			    		stockMapper.deleteByPrimaryKey(item.getId());
 			    		continue;
 			    	}
 			    	if(item.getNumber() > _num) {
+					    
 			    		if(item.getPrice()<=0.1) {
 			    			totalPrice += _num * materialTablePrice;
+			    			
 			    		}
 			    		else {
 			    			totalPrice += _num * item.getPrice();
 			    		}
+			    		
+			    		materialJson.setTaxRate(item.getPlus());
+					    materialJson.setManufacturing(item.getManufacturer());
+					    materialJson.setSupplier(item.getSupplier());
+				    	System.out.println("hhhbatch:"+item.getBatch());
+				    	materialJson.setPrice(totalPrice/num);
+					    materialJson.setMaterialSpec(material.getMaterialSpec());
+					    materialJson.setWarehousePosition(material.getWarehousePosition());
+					    materialJson.setSize(material.getMaterialType());
+					    materialJson.setTotalPrice(totalPrice);
+					    materialJson.setMaterialId(materialId);
+					    materialJson.setNumber(_num);
+					    materialJson.setMaterial((String) object.get("material"));
+					    materialJson.setUnit((String) object.get("unit"));
+						materialJson.setBatch(item.getBatch());
+						list.add(materialJson);
 			    		item.setNumber(item.getNumber()-_num);
 			    		_num = 0;
 			    		stockMapper.updateByPrimaryKeySelective(item);
 			    		break;
 			    	}
-			    	else {
+			    	else { 	
 			    		totalPrice += item.getNumber()*item.getPrice();
 			    		_num -=item.getNumber();
 			    		item.setNumber(0);
 			    		stockMapper.updateByPrimaryKeySelective(item);
-
+			    		materialJson.setTaxRate(item.getPlus());
+					    materialJson.setManufacturing(item.getManufacturer());
+					    materialJson.setSupplier(item.getSupplier());
+					    materialJson.setPrice(totalPrice/num);
+					    materialJson.setMaterialSpec(material.getMaterialSpec());
+					    materialJson.setWarehousePosition(material.getWarehousePosition());
+					    materialJson.setSize(material.getMaterialType());
+					    materialJson.setTotalPrice(totalPrice);
+					    materialJson.setMaterialId(materialId);
+					    materialJson.setNumber(num-_num);
+					    materialJson.setMaterial((String) object.get("material"));
+					    materialJson.setUnit((String) object.get("unit"));
+					    materialJson.setBatch(item.getBatch());
+					    list.add(materialJson);
 			    	}
 			    }
 			    //将价格添加到json中
-			    
-			    Material materialJson = new Material();
 			    System.out.println("totalPrice"+totalPrice);
 			    System.out.println("materialnum:"+num+"  _num:"+_num);
-			    materialJson.setTotalPrice(totalPrice);
-			    materialJson.setMaterialId(materialId);
-			    materialJson.setNumber(num-_num);
-			    materialJson.setMaterial((String) object.get("material"));
-			    materialJson.setUnit((String) object.get("unit"));
-			    list.add(materialJson);
+			   
 			}
 			String factJson = jsonCreater.writeValueAsString(list);
 			record.setFactMaterials(factJson);
@@ -226,6 +253,7 @@ public class MaterialDataService {
 		return true;
 		
 	}
+	
 	
 	private static void updateBatchStock() {
 		// TODO Auto-generated method stub
@@ -337,6 +365,8 @@ public class MaterialDataService {
 			batchStock.setNumber(item.getImportNumber());
 			batchStock.setPrice(item.getPriceIncludeTax());
 			batchStock.setPlus(item.getTaxRate().toString());
+			batchStock.setManufacturer(item.getManufacturing());
+			batchStock.setSupplier(item.getSupplier());
 			mapper.insert(batchStock);
 		}
 		sqlSession.commit();
@@ -350,6 +380,31 @@ public class MaterialDataService {
 		String result = jsonCreater.writeValueAsString(list);
 		return result;
 	}
+	public static String getMaterialsByBaoxiuId(String id) throws JsonProcessingException {
+		// TODO Auto-generated method stub
+		System.out.println(id);
+		XinyiPickingMapper mapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		XinyiPickingExample example = new XinyiPickingExample();
+		com.xinyi.bean.XinyiPickingExample.Criteria createCriteria = example.createCriteria();
+		createCriteria.andBaoxiuIdEqualTo(id);
+		return jsonCreater.writeValueAsString(mapper.selectByExample(example).get(0).getFactMaterials());
+	}
+	public static String getAllRecord() {
+		XinyiPickingMapper pickingmapper = sqlSession.getMapper(XinyiPickingMapper.class);
+		XinyiImportMapper importMapper = sqlSession.getMapper(XinyiImportMapper.class);
+		List<XinyiPicking> pickingList =pickingmapper.selectAll();
+		List<XinyiImport> importList = importMapper.selectAll();
+		List<XinyiMaterial> MaterialList = new ArrayList<XinyiMaterial>();
+		for(XinyiPicking pickItem :pickingList ) {
+			if(pickItem.getFactMaterials() == null) {
+				continue;
+			}
+			com.alibaba.fastjson.JSONArray.parse(pickItem.getFactMaterials());
+		}
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 	
 }

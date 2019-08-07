@@ -6,6 +6,7 @@ pageEncoding="UTF-8"%>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>仓库管理系统</title>
+    <script src="./js/toExcel.js"></script>
     <link rel="stylesheet" type="text/css"
           href="./css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css"
@@ -256,10 +257,13 @@ pageEncoding="UTF-8"%>
                                         <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/stock-inManagementRecords.html">入库日志</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/stock-inManagement.jsp">入库</a>
+                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/stock-inManagement.html">入库</a>
                                     </li>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/stock-outManagement.jsp">出库</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/allRecord.html">记录汇总</a>
                                     </li>
                                 
                             </ul>

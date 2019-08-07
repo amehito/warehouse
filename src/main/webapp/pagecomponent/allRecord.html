@@ -31,110 +31,135 @@
 			minView:2
 		});
 	}
+	let allArr = [];
 
 	// 表格初始化
 	function userOperationRecordTableInit(){
+		let importData;
+		let pickingData;
 		fetch('Material/allImportInfo')
 		.then(function(response){
 			return response.json();
 		}).then(function(json){
 			json = json.reverse();
-			data = json;
-			$('#userOperationRecordTable').bootstrapTable({
-		        columns:[{
-		            field : 'materialId',
-		            title : '零件Id'
-		        },{
-		            field : 'materialName',
-		            title : '名字'
-		        },{
-		            field : 'materialSpec',
-		            title : '规格'
-		            /* formatter : function(value, row, index) {
-						var s = '<button class="btn btn-info btn-sm edit"><span>详细</span> </button>';
-						var fun = '';
-						return s;
-					},
-					events : {
-						// 操作列中编辑按钮的动作
-						'click .edit' : function(e, value,
-								row, index) {
-							rowDetailOperation(row);
+			importData = json;
+			let importArr = importData.map((item)=>({"batch":item.batchManage,"id":item.id,"number":item.importNumber,"manufacturing":item.manufacturing,"materialId":item.materialId,"materialName":item.materialName,"materialSpec":item.materialSpec,"plus":item.plus,"price":item.price,"priceIncludeTax":item.priceIncludeTax,"size":item.size,"supplier":item.supplier,"tax":item.tax,"taxRate":item.taxRate,"totalPrice":item.totalPrice,"totalPriceIncludeTax":item.totalPriceIncludeTax,"unit":item.unit,"viceId":item.viceId,"warehousePosition":item.warehousePosition,"status":"入库"}))
+			console.log(importArr);
+			allArr.push(...importArr);
+			fetch('Material/allRequestInfo')
+			.then(function(response){
+				return response.json();
+			}).then(function(json){
+				json = json.reverse();
+				pickingData = json;
+				let pickingArr = [];
+				json.filter((item)=>item.factMaterials!=undefined).map(item=>({"materials":item.factMaterials})).forEach(item=>((eval(item.materials).forEach(item=>{pickingArr.push(item)}))));
+				console.log(pickingArr);
+				pickingArr = pickingArr.map((item)=>({"batch":item.batch,"id":item.materialId,"number":item.number,"manufacturing":item.manufacturing,"materialId":item.materialId,"materialName":item.material,"materialSpec":item.materialSpec,"plus":item.plus,"price":item.price*(1-item.taxRate/100),"priceIncludeTax":item.price,"size":item.size,"supplier":item.supplier,"tax":item.tax,"taxRate":item.taxRate,"totalPrice":item.totalPrice*(1-item.taxRate/100),"totalPriceIncludeTax":item.totalPrice,"unit":item.unit,"viceId":item.viceId,"warehousePosition":item.warehousePosition,"status":"出库"}))
+
+				allArr.push(...pickingArr);
+				console.log({allArr});
+				$('#userOperationRecordTable').bootstrapTable({
+			        columns:[{
+			        	field : 'status',
+			        	title : '操作'
+			        },{
+			            field : 'materialId',
+			            title : '零件Id'
+			        },{
+			            field : 'materialName',
+			            title : '名字'
+			        },{
+			            field : 'materialSpec',
+			            title : '规格'
+			            /* formatter : function(value, row, index) {
+							var s = '<button class="btn btn-info btn-sm edit"><span>详细</span> </button>';
+							var fun = '';
+							return s;
 						},
-						
-					} */
-		        },{
-		            field : 'warehousePosition',
-		            title : '仓库位置'
-		        },{
-		            field : 'importNumber',
-		            title : '数量'
-		        },{
-		            field : 'priceIncludeTax',
-		            title : '含税价',
-	            	formatter : function(value, row, index) {
-						return value.toFixed(3);
-					},
-		        },{
-		            field : 'price',
-		            title : '单价',
-		            formatter : function(value, row, index) {
-						return value.toFixed(3);
-					},
-		        },{
-		            field : 'taxRate',
-		            title : '税率'
-		        },{
-		            field : 'size',
-		            title : '种类'
-		        },/* {
-		            field : 'tax',
-		            title : '税款',
-		            visible: false
-		        }, */{
-		            field : 'totalPriceIncludeTax',
-		            title : '含税总价',
-		            formatter : function(value, row, index) {
-						return value.toFixed(3);
-					},
-		        },{
-		            field : 'totalPrice',
-		            title : '不含税总价',
-		            formatter : function(value, row, index) {
-						return value.toFixed(3);
-					},
-		        },
-		        {
-		            field : 'unit',
-		            title : '单位'
-		        }
-		        ,{
-		            field : 'batchManage',
-		            title : '批次管理'
-		        }
-		        ,{
-		            field : 'supplier',
-		            title : '供应商'
-		        }
-		        ,{
-		            field : 'manufacturing',
-		            title : '厂商'
-		        },{
-		            field : 'plus',
-		            title : '备注'
-		        }
-		        ],
-		        data:json,
-		        method : 'GET',
-	            dataType : 'json',
-	            pagination : true,
-	            pageNumber : 1,
-	            pageSize : 20,
-	            pageList : [ 5, 10, 25, 50, 100 ],
-	            clickToSelect : true
-		    });
+						events : {
+							// 操作列中编辑按钮的动作
+							'click .edit' : function(e, value,
+									row, index) {
+								rowDetailOperation(row);
+							},
+							
+						} */
+			        },{
+			            field : 'warehousePosition',
+			            title : '仓库位置'
+			        },{
+			            field : 'number',
+			            title : '数量'
+			        },{
+			            field : 'priceIncludeTax',
+			            title : '含税价',
+		            	formatter : function(value, row, index) {
+							return value.toFixed(3);
+						},
+			        },{
+			            field : 'price',
+			            title : '单价',
+			            formatter : function(value, row, index) {
+							return value.toFixed(3);
+						},
+			        },{
+			            field : 'taxRate',
+			            title : '税率'
+			        },{
+			            field : 'size',
+			            title : '种类'
+			        },/* {
+			            field : 'tax',
+			            title : '税款',
+			            visible: false
+			        }, */{
+			            field : 'totalPriceIncludeTax',
+			            title : '含税总价',
+			            formatter : function(value, row, index) {
+							return value.toFixed(3);
+						},
+			        },{
+			            field : 'totalPrice',
+			            title : '不含税总价',
+			            formatter : function(value, row, index) {
+							return value.toFixed(3);
+						},
+			        },
+			        {
+			            field : 'unit',
+			            title : '单位'
+			        }
+			        ,{
+			            field : 'batch',
+			            title : '批次管理'
+			        }
+			        ,{
+			            field : 'supplier',
+			            title : '供应商'
+			        }
+			        ,{
+			            field : 'manufacturing',
+			            title : '厂商'
+			        },{
+			            field : 'plus',
+			            title : '备注'
+			        }
+			        ],
+			        data:allArr,
+			        method : 'GET',
+		            dataType : 'json',
+		            pagination : true,
+		            pageNumber : 1,
+		            pageSize : 20,
+		            pageList : [ 5, 10, 25, 50, 100 ],
+		            clickToSelect : true
+			    });
+			});
 		});
-	    
+		
+		
+		
 	}
 	function rowDetailOperation(row) {
 		console.log(1);
@@ -170,7 +195,7 @@
 				$('#export_modal').modal("show");
 			})
 			$('#export_storage_download').click(function(){
-				JSONToExcelConvertor(data);			
+				JSONToExcelConvertor(allArr);			
 				$('#export_modal').modal("hide");
 			})
 			
@@ -178,11 +203,7 @@
 		}
 	// 表格刷新
 	function tableRefresh(search_id,search_start_date,search_end_date) {
-		console.log({search_start_date});
-		fetch('Material/allImportInfo')
-		.then(function(response){
-			return response.json();
-		}).then(function(json){
+			json = allArr;
 			json=json.filter(function(item){
 				if(search_id == '' && search_start_date =='' && search_end_date ==''){
 					console.log(1);
@@ -191,22 +212,22 @@
 				else if(search_start_date =='' && search_end_date==''){
 					console.log(2);
 
-					return item.size == search_id ;
+					return item.size == search_id || item.status == search_id;
 				}
 				else if(search_id==''){
 
-					return filterDate(item.batchManage ,search_start_date,search_end_date);
+					return filterDate(item.batch ,search_start_date,search_end_date);
 				}
 				else{
 					console.log(4);
 					console.log({search_id,item});
-					return item.size == search_id && filterDate(item.batchManage,search_start_date,search_end_date);
+					return item.size == search_id && filterDate(item.batch,search_start_date,search_end_date);
 				}										
 			})
-			data = json;
+			allArr = json;
 			$('#userOperationRecordTable').bootstrapTable('load', json);
 
-		});
+	
 		
 	}
 	let dateMap = new Map();

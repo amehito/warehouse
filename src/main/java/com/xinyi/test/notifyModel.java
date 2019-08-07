@@ -7,6 +7,13 @@ import java.util.Map;
 import com.xinyi.service.MaterialDataService;
 
 public class notifyModel {
+	private String baoxiuId;
+	public String getBaoxiuId() {
+		return baoxiuId;
+	}
+	public void setBaoxiuId(String baoxiuId) {
+		this.baoxiuId = baoxiuId;
+	}
 	private String admin;
 	private Date Time;
 	private List<Material> Materials;

@@ -14,7 +14,7 @@ function quickAccessInit(){
 		if(title ==='库存查询')
 			url = "pagecomponent/goodsSearch.jsp";	
 		else if(title ==='货物入库')
-			url = "pagecomponent/stock-inManagement.jsp";
+			url = "pagecomponent/stock-inManagement.html";
 		else if (title==='货物出库')
 			url = "pagecomponent/stock-outManagement.jsp";
 	//	var url = $('.menu_item:contains('+ title + ')').attr('name');

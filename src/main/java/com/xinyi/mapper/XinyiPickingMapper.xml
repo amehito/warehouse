@@ -219,6 +219,9 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+  	select * from xinyi_picking
+  </select>
   <update id="updateByExampleSelective" parameterType="map">
     <!--
       WARNING - @mbg.generated
