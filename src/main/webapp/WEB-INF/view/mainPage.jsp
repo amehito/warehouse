@@ -265,7 +265,9 @@ pageEncoding="UTF-8"%>
                                     <li class="list-group-item">
                                         <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/allRecord.html">记录汇总</a>
                                     </li>
-                                
+                                	<li class="list-group-item">
+                                        <a href="javascript:void(0)" id="" class="menu_item" name="pagecomponent/board.html">领料面板</a>
+                                    </li>
                             </ul>
                         </div>
                     </div>

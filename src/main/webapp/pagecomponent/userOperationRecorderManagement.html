@@ -172,9 +172,11 @@
 		let startDate = search_start_date.split('-');
 		let endDate = search_end_date.split('-');
 		console.log({startDate,endDate})
-		return parseInt(month)>=parseInt(startDate[1]) && parseInt(month)<=parseInt(endDate[1])
-			&&parseInt(year)>=parseInt(startDate[0]) && parseInt(year)<=parseInt(endDate[0])
-			&&parseInt(day)>=parseInt(startDate[2]) && parseInt(day)<=parseInt(endDate[2])
+		let nowtime = parseInt(`${year}${month}${day}`);
+		startDate = parseInt(`${startDate[0]}${startDate[1]}${startDate[2]}`);
+		endDate = parseInt(`${endDate[0]}${endDate[1]}${endDate[2]}`);
+		
+		return nowtime>=startDate && nowtime <=endDate;
 		;
 	}
 

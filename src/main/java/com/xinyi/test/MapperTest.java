@@ -44,32 +44,32 @@ public class MapperTest {
 
 	
 	public static void main(String[] args) {
-		XinyiUserMapper xinyiUserMapper;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		TimeZone zone = TimeZone.getDefault();
-		format.setTimeZone(zone);
-		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
-		XinyiMaterialMapper Mapper = sqlSession.getMapper(XinyiMaterialMapper.class);
-		XinyiMaterial record = new XinyiMaterial();
-		record.setMaterialId("10000000011");
-		record.setViceId("AC0003");
-		record.setMaterialName("测试名称2");
-		record.setMaterialSpec("测试规格0002");
-		record.setWarehousePosition("AP0000002");
-		record.setMaterialType("断路器");
-		record.setMaterialUnit("只");
-		record.setMaterialPrice((float)9.5);
-		record.setStockNumber(3);
-		record.setStockSafe(2);
-		record.setBatchManage("不确定");
-		
-		record.setStartTime(new Date());
-		 
-		record.setCreateManager("叶叶叶");
-		
-		
-		Mapper.insert(record);
-		sqlSession.commit();
+//		XinyiUserMapper xinyiUserMapper;
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//		TimeZone zone = TimeZone.getDefault();
+//		format.setTimeZone(zone);
+//		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
+//		XinyiMaterialMapper Mapper = sqlSession.getMapper(XinyiMaterialMapper.class);
+//		XinyiMaterial record = new XinyiMaterial();
+//		record.setMaterialId("10000000011");
+//		record.setViceId("AC0003");
+//		record.setMaterialName("测试名称2");
+//		record.setMaterialSpec("测试规格0002");
+//		record.setWarehousePosition("AP0000002");
+//		record.setMaterialType("断路器");
+//		record.setMaterialUnit("只");
+//		record.setMaterialPrice((float)9.5);
+//		record.setStockNumber(3);
+//		record.setStockSafe(2);
+//		record.setBatchManage("不确定");
+//		
+//		record.setStartTime(new Date());
+//		 
+//		record.setCreateManager("叶叶叶");
+//		
+//		
+//		Mapper.insert(record);
+//		sqlSession.commit();
 		
 //		XinyiUserExample example = new XinyiUserExample();
 //		Criteria createCriteria = example.createCriteria();

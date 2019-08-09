@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +15,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xinyi.bean.XinyiManufactures;
 import com.xinyi.bean.XinyiSupplierInfo;
+import com.xinyi.bean.XinyiSupplierInfoExample;
+import com.xinyi.bean.XinyiSupplierInfoExample.Criteria;
 import com.xinyi.dao.XinyiManufacturesMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiSupplierInfoMapper;
@@ -48,5 +51,47 @@ public class OthersController {
 		System.out.println(list.size());
 		
 		return jsonCreater.writeValueAsString(list);
+	}
+	
+	@RequestMapping(value="/editSupplier",produces="application/json;charset=utf-8")
+	public @ResponseBody String editSupplier(@RequestBody XinyiSupplierInfo info) throws JsonProcessingException {
+		XinyiSupplierInfoMapper mapper = sqlSession.getMapper(XinyiSupplierInfoMapper.class);
+		XinyiSupplierInfoExample example = new XinyiSupplierInfoExample();
+		Criteria createCriteria = example.createCriteria();
+		createCriteria.andNameEqualTo(info.getName());
+		createCriteria.andTypeEqualTo(info.getType());
+		List<XinyiSupplierInfo> list = mapper.selectByExample(example);
+		if(list.size() == 0)	{
+			XinyiSupplierInfo  supplierInfo = new XinyiSupplierInfo();
+			supplierInfo.setName(info.getName());
+			supplierInfo.setType(info.getType());
+			mapper.insert(supplierInfo);
+		}else {
+			mapper.deleteByPrimaryKey(list.get(0).getId());
+		}
+		sqlSession.commit();
+		String result = jsonCreater.writeValueAsString(mapper.selectAll());
+		return result;
+	}
+	
+	@RequestMapping(value="/editManufacturer",produces="application/json;charset=utf-8")
+	public @ResponseBody String editManufacturer(@RequestBody XinyiSupplierInfo info) throws JsonProcessingException {
+		XinyiSupplierInfoMapper mapper = sqlSession.getMapper(XinyiSupplierInfoMapper.class);
+		XinyiSupplierInfoExample example = new XinyiSupplierInfoExample();
+		Criteria createCriteria = example.createCriteria();
+		createCriteria.andNameEqualTo(info.getName());
+		createCriteria.andTypeEqualTo(info.getType());
+		List<XinyiSupplierInfo> list = mapper.selectByExample(example);
+		if(list.size() == 0)	{
+			XinyiSupplierInfo  supplierInfo = new XinyiSupplierInfo();
+			supplierInfo.setName(info.getName());
+			supplierInfo.setType(info.getType());
+			mapper.insert(supplierInfo);
+		}else {
+			mapper.deleteByPrimaryKey(list.get(0).getId());
+		}
+		sqlSession.commit();
+		String result = jsonCreater.writeValueAsString(mapper.selectAll());
+		return result;
 	}
 }

@@ -89,7 +89,7 @@
 						<tr>
 							<td><input type="" name=""></td>
 							<td><input type="" name=""></td>
-							<td><input type="" name="" id="auto" oninput="searchForFill(this.value)"></td>
+							<td><input type="" name="" class="auto" oninput="searchForFill(this.value)"></td>
 							<td><input type="" name=""></td>
 							<td><input type="" name=""></td>
 							<td><input type="" name="" oninput="fillMoneyInput()"></td>
@@ -120,7 +120,7 @@
 			let fill = `<tr>
 		      <td><input type='text'></td>
 		      <td><input type='text'></td>
-		      <td><input type='text' oninput="searchForFill(this.value)"></td>
+		      <td><input type='text' class='auto' oninput="searchForFill(this.value)"></td>
 		      <td><input type='text'></td>
 		      <td><input type='text'></td>
 		      <td><input type='text'></td>
@@ -181,10 +181,25 @@
     		
     		father.innerHTML+=`<button class='btn' >${name}</button>`;
     	}
-
+    	let supplierInfo = {
+    			"name":name,
+    			"type":"供应商",
+    			"id":'',
+    			"telephone":'',
+    			"plus":''
+    	}
+    	$.ajax({
+    		url:"OtherInfo/editManufacturer",
+    		type:'POST',
+    		data:JSON.stringify(supplierInfo),
+    		dataType:'json',
+			contentType:"application/json;charset=utf8",
+			success:function(response){
+			}
+    	})
     }
 
-    function editManufacturer(){
+    function editManufacturer(){    	
     	let name = document.querySelector('#supplierName').value;
     	let father = document.querySelector('#manufacturer');
     	let isPresence = false;
@@ -199,6 +214,22 @@
     		
     		father.innerHTML+=`<button class='btn' >${name}</button>`;
     	}
+    	let supplierInfo = {
+    			"name":name,
+    			"type":"厂家",
+    			"id":'',
+    			"telephone":'',
+    			"plus":''
+    	}
+    	$.ajax({
+    		url:"OtherInfo/editSupplier",
+    		type:'POST',
+    		data:JSON.stringify(supplierInfo),
+    		dataType:'json',
+			contentType:"application/json;charset=utf8",
+			success:function(response){
+			}
+    	})
     }
 
 
@@ -247,6 +278,11 @@
 			})
 		}
 			function addTable() {
+				let allInput = document.querySelectorAll('table input');
+
+				for(let i=0;i<allInput.length/tableWidth;i++){
+					allInput[i*tableWidth+14].value = batchManage;
+				}
 				let childNode = document.createElement('tr');
 				childNode.innerHTML = fill;
 				document.querySelector('tbody').appendChild(childNode);
@@ -289,7 +325,7 @@
     	let index = allArray.length-tableWidth;
     	let inputItem = allArray[index+2];
 
-    	$(inputItem).autocomplete({
+    	$('.auto').autocomplete({
       	  source:arr,
     	  select:function(event,ui){
     		  console.log(ui.item.label);

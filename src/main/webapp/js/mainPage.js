@@ -42,7 +42,7 @@ function signOut() {
 			success:function(response){
 				//刷新
 				console.log('退出');
-				window.location.href="login-page.html";
+				window.location.href="login.html";
 			},error:function(response){
 				
 			}
