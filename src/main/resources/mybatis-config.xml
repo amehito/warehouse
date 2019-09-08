@@ -2,10 +2,7 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-<settings>
-	<setting name="logImpl" value="STDOUT_LOGGING"/>
-	
-</settings>
+
 <typeAliases>
 
 </typeAliases>
@@ -14,9 +11,9 @@
 <transactionManager type="JDBC" />
 <dataSource type="POOLED">
 <property name="driver" value="com.mysql.jdbc.Driver" />
-<property name="url" value="jdbc:mysql://localhost:3306/xinyi?serverTimezone=UTC" />
+<property name="url" value="jdbc:mysql://localhost:3308/xinyi?serverTimezone=UTC" />
 <property name="username" value="root" />
-<property name="password" value="123456" />
+<property name="password" value="hanako" />
 </dataSource>
 </environment>
 </environments>

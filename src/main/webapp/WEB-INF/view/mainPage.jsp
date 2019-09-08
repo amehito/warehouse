@@ -326,31 +326,29 @@ pageEncoding="UTF-8"%>
         <h4 class="modal-title" id="myModalLabel">Modal title</h4>
       </div>
       <div class="modal-body">
-        <table  border=1; cellpadding=12; cellspacing=0; align=center id="modalTable">
+        <table  border=1; cellpadding=6; cellspacing=0; align=center id="modalTable">
 				<tr align=center>
-					<td colspan="4">领料单</td>
-				</tr>
-				<tr align=center>
-					<td>领料人姓名:</td>
+					<td colspan="1">领料单</td>
+					<td>姓名:</td>
 					<td colspan="3" id="userName"></td>
-					
 				</tr>
+		
 				<tr align=center>
 					<td>领料日期:</td>
-					<td colspan="3" id="time"></td>
+					<td colspan="4" id="time"></td>
 				</tr>
 				
 				<tr align=center>
-					<td colspan="4">领料信息</td>
+					<td colspan="5">领料信息</td> 
 				</tr>
 				<tr align=center>
 					<td>物品名称</td>
 					<td>物品编号</td>
 					<td>数量</td>
 					<td>单位</td>
-					
+					<td>仓位</td>
 				</tr>
-				<tbody id="information">
+				<tbody id="information" >
 				<tr align=center>
 					<td></td>
 					<td></td>

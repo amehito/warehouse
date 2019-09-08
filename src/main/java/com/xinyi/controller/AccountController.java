@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xinyi.bean.RegisterInfo;
 import com.xinyi.bean.XinyiUser;
 import com.xinyi.bean.XinyiUserExample;
 import com.xinyi.bean.XinyiUserRoleKey;
@@ -95,22 +96,21 @@ public class AccountController {
         return responseContent.generateResponse();
     }
 	
-	@RequestMapping("register")
-	public Map<String, Object> register(HttpServletRequest request) {
-		String newUsername = (String) request.getParameter("newUsername");
-		String newPassword = (String) request.getParameter("newPassword");
+	@RequestMapping("/register")
+	public Map<String, Object> register(@RequestBody RegisterInfo info) {
+		String newUsername = info.getNewUsername();
+		String newPassword = info.getNewPassword();
 		System.out.println(newPassword + "  username = "+newUsername);
-		Md5Hash md5Hash = new Md5Hash(newPassword);
 		
 		SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
 		
 		//先确认是否有该用户名
 		
-		
+		 
 		XinyiUserRoleKey record = new XinyiUserRoleKey();
 		XinyiUser newUser = new XinyiUser();
 		newUser.setUserUsername(newUsername);
-		newUser.setUserPassword(md5Hash.toString());
+		newUser.setUserPassword(newPassword);
 		sqlSession.getMapper(XinyiUserMapper.class).insert(newUser);
 		record.setUserId(newUser.getUserId());
 		record.setRoleId(1);

@@ -1,7 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
     
-    
+ <style>
+ 	.modalImg{
+ 		width: 100%;
+ 		height:100%;
+ 		position: relative;
+ 	}
+ </style>
  <script>
     // 鏌ヨ鍙傛暟
 	//document.querySelector('#search_button').addEventListener('keydown',function(key){console.log(key)});
@@ -21,7 +27,10 @@
         searchActionInit();
     })
 	
-    
+    function showPicture(row){
+    	console.log({row});
+    	$('#myModal').modal("show");
+    }
     // 鏃ユ湡閫夋嫨鍣ㄥ垵濮嬪寲
 	function datePickerInit(){
 		$('.form_date').datetimepicker({
@@ -46,7 +55,8 @@
 	            title : '零件编号'
 	        },{
 	            field : 'createManager',
-	            title : '管理员姓名'
+	            title : '管理员姓名',
+	            visible:false	            
 	        },{
 	            field : 'userName',
 	            title : '用户姓名',
@@ -57,7 +67,8 @@
 	            title : '零件名'
 	        },{
 	            field : 'startTime',
-	            title : '时间'
+	            title : '时间',
+	            visible:false 
 	        },{
 	            field : 'stockNumber',
 	            title : '剩余数量',
@@ -78,7 +89,26 @@
 	           	},events:{
 	           		
 	           	}
+	        },
+	        {
+	            field : '',
+	            title : '图片',
+	           	formatter:function(value,row,index){
+	           	
+	           		var s = `<button class="btn btn-primary showPic" type="button" >
+	           				显示图片
+	          			 	 </button>`;	           		
+	           		return s;
+	           			
+	           		
+	           	},events:{
+	           		'click .showPic' : function(e, value,
+							row, index) {
+						showPicture(row);
+	           		},
+	           	}
 	        }],
+	        
 	        url:'Material/getMaterialInfo',
 	        sortable: true,   
 	        pageList : [ 10,20,50],
@@ -209,4 +239,24 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+		<img class='modalImg' src="./media/images/backgroundPic.png" alt="..." class="img-rounded">
+		
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-danger" id="declineExport" data-dismiss="modal">拒绝</button>
+        <button type="button" class="btn btn-primary" id="identifyExport" data-dismiss="modal">确认</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +21,14 @@ import com.xinyi.bean.XinyiSupplierInfoExample.Criteria;
 import com.xinyi.dao.XinyiManufacturesMapper;
 import com.xinyi.dao.XinyiMaterialMapper;
 import com.xinyi.dao.XinyiSupplierInfoMapper;
+import com.xinyi.dao.XinyiUserMapper;
 import com.xinyi.utils.MybatisOfSpringUtil;
 
 @Controller
 @RequestMapping("/OtherInfo")
 public class OthersController {
+	
+	
 	
 	private static ObjectMapper jsonCreater = new ObjectMapper() ;
 	SqlSession sqlSession = MybatisOfSpringUtil.getSessionFactory().openSession();
@@ -42,6 +46,8 @@ public class OthersController {
 		return result ;
 		
 	}
+	
+	
 	
 	@RequestMapping(value="/supplier",method=RequestMethod.GET
 			,produces="application/json;charset=utf-8")

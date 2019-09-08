@@ -285,7 +285,7 @@
       }
       function fillByMaterialId(row,materialId,result){
     	  console.log({row,materialId,result});
-    	  let info = result.filter(item => item.materialId == materialId);
+    	  let info = result.filter(item => item.materialName == materialId);
     	  //填充info
     	  console.log({info});
     	  let inputArrays = document.querySelectorAll('table input');

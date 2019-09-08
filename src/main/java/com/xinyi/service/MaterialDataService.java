@@ -183,10 +183,11 @@ public class MaterialDataService {
 			    System.out.println(stockList.size());
 			    for(XinyiBatchStock item:stockList) {
 			    	
-			    	if(item.getNumber()==0) {
+			    	if(item.getNumber()==0 && stockList.size()>=2) {
 			    		stockMapper.deleteByPrimaryKey(item.getId());
 			    		continue;
 			    	}
+			    	
 			    	if(item.getNumber() > _num) {
 					    
 			    		if(item.getPrice()<=0.1) {
@@ -397,7 +398,12 @@ public class MaterialDataService {
 		XinyiPickingExample example = new XinyiPickingExample();
 		com.xinyi.bean.XinyiPickingExample.Criteria createCriteria = example.createCriteria();
 		createCriteria.andBaoxiuIdEqualTo(id);
-		return jsonCreater.writeValueAsString(mapper.selectByExample(example).get(0).getFactMaterials());
+		List<XinyiPicking> list = mapper.selectByExample(example);
+		List<String> result = new ArrayList<String>();
+		for(XinyiPicking picking:list) {
+			result.add(picking.getFactMaterials());
+		}
+		return jsonCreater.writeValueAsString(result);
 	}
 	public static String getAllRecord() {
 		XinyiPickingMapper pickingmapper = sqlSession.getMapper(XinyiPickingMapper.class);

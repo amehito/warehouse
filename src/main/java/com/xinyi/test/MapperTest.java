@@ -2,6 +2,7 @@ package com.xinyi.test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,8 +110,24 @@ public class MapperTest {
 		List<XinyiImport> list = sqlSession.getMapper(XinyiImportMapper.class).selectAll();
 		System.out.println(list.size());
 		System.out.println(1);
+		File file = new File("C:\\Users\\45981\\Desktop\\机物料");
+		ArrayList<String> list2 = new ArrayList<String>();
+		traverse(list2,file);
+		System.out.println(list2.size());
 	}
-	
+	int i = 0;
+	public void traverse(ArrayList list,File file) {
+		
+		if(file.isDirectory()) {
+			File[] files = file.listFiles();
+			for(File f:files) {
+				traverse(list,f);
+			}
+		}
+		else {
+			list.add(file.getName());
+		}
+	}
 	
 	public void test() throws ParseException {
 		ObjectMapper jsonCreater = new ObjectMapper();
@@ -136,3 +153,44 @@ public class MapperTest {
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

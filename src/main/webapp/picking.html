@@ -70,7 +70,6 @@
 		</style>
 	</head>
 	<body>
-		
 		<div class="picking">
 		<div class="pickingInformation">
 			<h1>物品列表</h1>
@@ -80,6 +79,7 @@
 					<td>编号</td>
 					<td>数量</td>
 					<td>单位</td>
+					<td>价格</td>
 					<td></td>
 				</tr>
 				
@@ -126,7 +126,9 @@
 			<button class="btnn" onclick="Submission()" id="btnn">
 				提交
 			</button>
-			
+			<button class="btnn" onclick="javascript :history.back(-1);" id="btnn">
+				返回 
+			</button>
 		</div>
 		
 		</div>
@@ -139,22 +141,23 @@
 		var tab_num_flag=1;
 		//搜索
 		var flag=0;
-		
-		
-		function pickingInformation(i){
-			flag=i;
-			var search_user_id=document.getElementById('name'+i).value;
-			$.ajax({
+		let allMaterial;
+		$.ajax({
 			url:'Material/getMaterialInfo',
 			method:'post',
 			success:function(response){
-			console.log();
 			
-	//		console.log({search_user_id});
-			response = response.filter(function(key){
+				allMaterial = response;
+			}
+		});		
+		function pickingInformation(i){
+			flag=i;
+			var search_user_id=document.getElementById('name'+i).value;
+			let response = allMaterial.filter(function(key){
 				let alpha = getCamelChars(key.materialName);
+
 				return key.materialId === search_user_id ||(key.materialName.search(search_user_id)!=-1) || alpha.search(search_user_id)!=-1;
-			});		
+			});	
 			console.log({response});
 			console.log({search_user_id});
 			var pickingInformation_table=document.getElementById('pickingInformation_table');
@@ -166,13 +169,15 @@
 												'<td>编号</td>'+
 												'<td>数量</td>'+
 												'<td>单位</td>'+
-												'<td></td>'+
+												'<td>价格</td>'+
+												'<td></td>'
 												'</tr>';
 		  	for(var i=0;i<response.length;i++){
 				pickingInformation_table.innerHTML+='<tr align=center><td id="name_tab'+i+'">'+response[i].materialName+'</td>'+
 					'<td id="name_id'+i+'">'+response[i].materialId+'</td>'+
 					'<td id="name_num'+i+'">'+response[i].stockNumber+'</td>'+
 					'<td id="name_unit'+i+'">'+response[i].materialUnit+'</td>'+
+					'<td id="name_price'+i+'">'+response[i].materialPrice+'</td>'+
 					'<td><button  onclick="addTo('+i+')">添加</button></td></tr>';
 			}   
  		//   	for(let i=0;i<response.length;i++){
@@ -186,8 +191,7 @@
 			// 	pickingInformation_table.innerHTML+=context;
 			// }  
 			
-			}
-			});
+			
 			
 		}
 		//添加
@@ -232,6 +236,7 @@
 					'<td id="id'+tab_num+'"></td>'+
 					'<td><input type="text" style="border: 0px;" value="" id="num'+tab_num+'"/></td>'+
 					'<td id="unit'+tab_num+'"></td>'+
+					
 					'<td><button onclick="Eliminate(this)" id="btn'+tab_num+'" style="display: none;margin: 0 auto;">删除</button></td>';
 				picking_table_tr.appendChild(R);
 		 	}
@@ -260,12 +265,15 @@
 		 		var id=document.getElementById('id'+i).innerText;
 		 		var num=document.getElementById('num'+i).value;
 		 		var unit=document.getElementById('unit'+i).innerText;
+		 		 
 		 		if(name!=null&&name!=""){
+			 		let pos=allMaterial.filter(item=>item.materialId==id)[0].warehousePosition; 
 		 			var infoItem = {
 		 				material:name,
 		 				materialId:id,
 		 				number:num,
-		 				unit:unit
+		 				unit:unit,
+		 				warehousePosition:pos
 		 			};
 		 			if(num=="") flag_num=false;
 		 			console.log(infoItem);

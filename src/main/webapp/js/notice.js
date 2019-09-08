@@ -5,7 +5,7 @@ var a={"admin":"admin","time":"2019-07-19","materials":[{"material":"DN20铝塑�
 function seeInformation(id){
 	globalId = id;
 	a = info.filter((item) =>  (item.id === id));
-	console.log({a});
+	console.log({a,info});
 	
 	var userName=document.getElementById('userName').innerText=a[0].name;
 	var time=document.getElementById('time').innerText=a[0].time;
@@ -20,6 +20,7 @@ function seeInformation(id){
 				"<td>"+json[i].materialId+"</td>"+
 				"<td>"+json[i].number+"</td>"+
 				"<td>"+json[i].unit+"</td>"+
+				"<td>"+json[i].warehousePosition+"</td>"+
 			"</tr>";
 	}
 	marked(id);

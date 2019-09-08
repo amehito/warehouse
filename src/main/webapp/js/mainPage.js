@@ -62,10 +62,6 @@ document.querySelector('#declineExport').addEventListener('click',function(){
 });
 let passRequest = document.querySelector('#identifyExport');
 	passRequest.addEventListener('click',function(){
-		let data ={"id":2};
-		
-		
-		
 		fetch('Material/passRequest',{
 			headers:new Headers({
 	           "Content-Type":"application/json",

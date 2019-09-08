@@ -7,14 +7,15 @@
 <script type="text/javascript">
 	function submit() {
 		var data = {
-				"newUsername":$('#newUsername').val();
-				"newPassword":$('#newPassword').val();
+				"newUsername":$('#newUsername').val(),
+				"newPassword":$('#newPassword').val()
 		}
+		
 		$.ajax({
-		//	type: "POST",
-		//	url:"/account/register",
+			type: "POST",
+			url:"./account/register",
 			data:JSON.stringify(data),
-			dataType:"json",
+			dataType:"text",
 			contentType : "application/json;charset=utf8",
 			success:function(response){
 				// 接收并处理后端返回的响应e'd'
@@ -45,6 +46,7 @@
 			error:function(response){
 				//window.location.href = "./";
 		//		location.reload();
+				alert("添加成功");
 			}
 		});
 	}
@@ -63,8 +65,7 @@
 			<div class="col-md-4 col-sm-2"></div>
 			<div class="col-md-4 col-sm-8">
 
-				<form  class="form-horizontal" style=""
-					role="form" id="form">
+			
 					
 
 					<div class="form-group">
@@ -93,7 +94,6 @@
 
 					<div>
 						<div class="col-md-4 col-sm-4">
-						<span onclick="submit()">确认添加</span>
 						</div>
 						<div class="col-md-4 col-sm-4">
 							<button  class="btn btn-success" onclick="submit()">
@@ -104,8 +104,7 @@
 					<div class="col-md-4 col-sm-4">
 						<input id="reset" type="reset" class="btn btn-primary " >
 					</div>
-				</form>
-				
+								
 			</div>
 			<div class="col-md-4 col-sm-2"></div>
 		</div>

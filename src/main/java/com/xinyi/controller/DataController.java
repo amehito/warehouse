@@ -32,7 +32,7 @@ import com.xinyi.test.notifyModel;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class DataController {
 	notifyModel notify;
-	final static int  materialInfoNumber = 4;
+	final static int  materialInfoNumber = 5;
 	boolean needQuery = false;
 	static boolean firstLogin = true;
 	static final String NO_MESSAGE = "no message";
@@ -176,12 +176,19 @@ public class DataController {
 //        params.remove("Time");
         System.out.println(params.size());
         ArrayList<Material> materialList = new ArrayList<Material>();
-        for(int i=0;i<params.size()/materialInfoNumber;i++) {
+        for(int i=0;i<params.size()/materialInfoNumber;i++) {       	     
         	Material material = new Material();
         	material.setMaterialId(params.get("materials["+i+"][materialId]")[0]);
         	material.setMaterial(params.get("materials["+i+"][material]")[0]);
         	material.setNumber(Integer.parseInt(params.get("materials["+i+"][number]")[0]));
         	material.setUnit(params.get("materials["+i+"][unit]")[0]);
+        	try {
+            	material.setWarehousePosition(params.get("materials["+i+"][warehousePosition]")[0]);
+
+        	}catch (Exception e) {
+				// TODO: handle exception
+        		e.printStackTrace();
+			}
         	materialList.add(material);
         }
         notify.setMaterials(materialList);

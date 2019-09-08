@@ -92,9 +92,9 @@ public class myController {
 			,produces="application/json;charset=utf-8")
 	
 	public String subLogin(User user,HttpSession httpSession) {
-		Md5Hash md5Hash = new Md5Hash(user.getPassword());
+		//Md5Hash md5Hash = new Md5Hash(user.getPassword());
 		org.apache.shiro.subject.Subject subject = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),md5Hash.toString());
+		UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
 		
 		try {
 			subject.login(token);
